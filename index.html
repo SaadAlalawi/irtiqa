@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ارتقاء</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#1f2a24;--mute:#6b7770;--green:#1f6b4f;--green2:#e3f1ea;--line:#e4e0d4;--amber:#b7791f;--amber2:#fbf1dc;--red:#a8382f;--red2:#fbe7e4;--dot:#ddd9cc}
+@media(prefers-color-scheme:dark){:root{--bg:#141a17;--card:#1d2621;--ink:#e9efe9;--mute:#9aa8a0;--green:#5cc49a;--green2:#1f3a2f;--line:#2c3832;--amber:#e3b45a;--amber2:#3a3118;--red:#ef8a80;--red2:#3d1f1c;--dot:#33403a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.6;font-size:17px}
+.wrap{max-width:560px;margin:0 auto;padding:16px 14px 70px}
+.tabs{display:flex;gap:4px;background:var(--line);border-radius:12px;padding:3px;margin-bottom:14px}
+.tabs button{flex:1;border:0;background:none;color:var(--mute);padding:8px 4px;border-radius:9px;font:inherit;font-size:14px;cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink);font-weight:600}
+h1{font-size:22px;margin:4px 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:15px;color:var(--mute);margin:14px 0 6px}
+label:first-child{margin-top:0}
+select,input,textarea{width:100%;font:inherit;padding:13px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.row2{display:flex;gap:10px}.row2>div{flex:1}
+.seg,.seg2{display:flex;gap:8px}
+.seg button,.seg2 button{flex:1;min-height:48px;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;font:inherit;font-size:16px;cursor:pointer}
+.seg button.on,.seg2 button.on{border-color:var(--green);background:var(--green2);color:var(--green);font-weight:700}
+.act{display:flex;gap:8px;margin-top:12px}
+.act>*{flex:1;min-height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;text-decoration:none;font:inherit;font-size:16px;font-weight:700;border:0;cursor:pointer}
+.act .c{background:var(--green);color:#fff}.act .g{background:var(--green2);color:var(--green)}
+.tabs.sub{margin-bottom:12px}
+.note{margin-top:8px;border-radius:10px;padding:8px 12px;font-size:15px}
+.note.good{background:var(--green2)}.note.good b{color:var(--green)}
+.note.warn{background:var(--red2)}.note.warn b{color:var(--red)}
+select.ntsel[data-v=good]{border-color:var(--green);background:var(--green2)}
+select.ntsel[data-v=warn]{border-color:var(--red);background:var(--red2)}
+.btn{width:100%;margin-top:18px;min-height:56px;border:0;border-radius:14px;background:var(--green);color:#fff;font:inherit;font-size:18px;font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--green2);color:var(--green);margin-top:0;min-height:46px;font-size:15px}
+.err{color:var(--red);font-size:14px;margin-top:8px}
+.done{background:var(--green2);color:var(--green);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-weight:600}
+.d{color:var(--mute);font-size:14px}
+.hist{padding:10px 0;border-top:1px solid var(--line)}
+.hist:first-of-type{border-top:0}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.nav button{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:20px;cursor:pointer}
+.nav button:disabled{opacity:.3}
+.nav .t{text-align:center;font-weight:700}
+.bar{height:8px;background:var(--dot);border-radius:99px;overflow:hidden;margin:8px 0 4px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.st{display:flex;align-items:center;gap:12px;width:100%;text-align:right;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:8px;font:inherit;color:var(--ink);cursor:pointer}
+.no{width:34px;height:34px;border-radius:50%;background:var(--green2);color:var(--green);display:grid;place-items:center;font-weight:700;flex:none}
+.st.miss .no{background:var(--dot);color:var(--mute)}
+.st .nm{font-weight:700}
+.st .what{font-size:14px;color:var(--green)}
+.st.miss .what{color:var(--mute)}
+.st .arr{margin-inline-start:auto;color:var(--mute);font-size:20px}
+.back{border:0;background:none;color:var(--green);font:inherit;font-size:16px;font-weight:600;padding:6px 0;cursor:pointer;margin-bottom:6px}
+.badge{display:inline-block;padding:3px 12px;border-radius:99px;font-size:14px;font-weight:700}
+.b-g{background:var(--green2);color:var(--green)}.b-a{background:var(--amber2);color:var(--amber)}.b-r{background:var(--red2);color:var(--red)}
+.stats{display:flex;gap:8px;margin:12px 0}
+.stat{flex:1;background:var(--bg);border-radius:12px;padding:10px 4px;text-align:center}
+.stat .n{font-size:22px;font-weight:800}.stat .l{font-size:12px;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:8px}
+.grid i{aspect-ratio:1;border-radius:4px;background:var(--dot)}
+.grid i.on{background:var(--green)}
+.legend{display:flex;justify-content:space-between;font-size:12px;color:var(--mute);margin-top:4px}
+.stp{display:flex;align-items:center;gap:10px;padding:6px 0}
+.stp .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--dot);color:var(--mute);font-weight:700;flex:none}
+.stp.done .dot{background:var(--green);color:#fff}
+.stp.cur .dot{background:var(--amber2);color:var(--amber);border:2px solid var(--amber)}
+.stp.cur{font-weight:700}.stp.todo{color:var(--mute)}
+.stp.rej .dot{background:var(--red2);color:var(--red)}
+.note.info{background:var(--bg);border:1px solid var(--line)}.note.info b{color:var(--ink)}
+.b-n{background:var(--dot);color:var(--mute)}
+#who{margin-top:8px;font-weight:600}
+.topbar{position:sticky;top:0;z-index:20;background:#1f6b4f;color:#fff;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:8px 10px;min-height:58px}
+.topbar .r{display:flex;align-items:center;gap:8px;min-width:0}
+#menubtn{background:none;border:0;color:#fff;font-size:28px;line-height:1;padding:4px 8px;cursor:pointer;position:relative}
+#hname{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .ttl{font-size:22px;font-weight:800;letter-spacing:.5px}
+#bell{background:none;border:0;line-height:0;padding:6px 8px;cursor:pointer;position:relative}
+.bellb{position:absolute;top:-2px;right:0;min-width:18px;height:18px;border-radius:9px;background:#ff6b5e;color:#fff;font-size:11px;font-weight:700;line-height:18px;text-align:center;padding:0 4px}
+.nt{display:flex;gap:12px;align-items:flex-start;width:100%;background:var(--bg);color:var(--ink);border:2px solid #1f6b4f;border-radius:14px;padding:12px 14px;margin-bottom:10px;text-align:right;font:inherit;font-size:16px;cursor:default}
+button.nt{cursor:pointer;align-items:center}
+.nt .ntic{color:var(--green);flex:none}
+.nt .d{color:var(--mute)}
+.pch{display:inline-block;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 12px;margin:3px;font:inherit;font-size:14px;cursor:pointer}
+.pch.on{border-color:var(--green);background:var(--green2);color:var(--green);font-weight:700}
+span.pch{cursor:default;border-color:var(--green);background:var(--green2);color:var(--green);padding:5px 11px;font-size:13px}
+.sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:45}
+.sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;max-height:88vh;overflow:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:16px 14px 22px;z-index:46;box-shadow:0 -6px 24px rgba(0,0,0,.3);animation:up .22s ease-out}
+.sheet .card{margin-bottom:0;border:0;box-shadow:none;padding:4px}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.dotb{position:absolute;top:3px;left:5px;width:10px;height:10px;background:#ff6b5e;border-radius:50%}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;right:0;width:min(82vw,310px);background:var(--card);z-index:40;transform:translateX(105%);transition:transform .22s;overflow:auto;padding-bottom:24px;box-shadow:-4px 0 24px rgba(0,0,0,.25)}
+.drawer.on{transform:none}
+.dh{background:#1f6b4f;color:#fff;padding:24px 16px 18px;margin-bottom:6px}
+.dh .s{font-size:14px;opacity:.85}
+.mi{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border:0;background:none;color:var(--ink);font:inherit;font-size:17px;text-align:right;cursor:pointer}
+.mi.on{background:var(--green2);color:var(--green);font-weight:700}
+.mi .bd{margin-inline-start:auto;background:var(--red);color:#fff;border-radius:99px;font-size:13px;padding:0 8px;min-width:22px;text-align:center}
+.msep{height:1px;background:var(--line);margin:8px 16px}
+.dbox{margin:18px 16px 0;padding:12px;border:1px dashed var(--line);border-radius:12px;font-size:13px;color:var(--mute)}
+.st.pend .no{background:var(--amber2);color:var(--amber)}.st.pend .what{color:var(--amber)}
+.stat.sm{padding:10px 6px;display:flex;flex-direction:column;gap:3px}
+.stat.sm .l{font-size:12px;color:var(--mute)}
+.stat.sm .n{font-size:14px;line-height:1.5;font-weight:700}
+.stat.sm .sb{font-size:11.5px;color:var(--mute);line-height:1.4}
+.chip{border:1px solid var(--green);background:var(--green2);color:var(--green);border-radius:99px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chead{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.phone{width:46px;height:46px;border-radius:50%;background:#1f6b4f;color:#fff;display:grid;place-items:center;text-decoration:none;font-size:21px;flex:none}
+.fab{position:fixed;left:18px;bottom:22px;width:58px;height:58px;border-radius:50%;background:#1f6b4f;color:#fff;font-size:32px;line-height:1;border:0;box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:15;cursor:pointer}
+.cnt{display:inline-block;background:#1f6b4f;color:#fff;border-radius:99px;font-size:12px;min-width:20px;padding:0 6px;text-align:center;line-height:20px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:15px;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1}
+.demo{font-size:12px;color:var(--mute);text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="r"><button id="menubtn" aria-label="القائمة">☰</button><span id="hname"></span></div><div class="ttl">ارتقاء</div><div style="display:flex;justify-content:flex-end"><button id="bell" aria-label="التنبيهات"><svg width="26" height="26" viewBox="0 0 24 24" fill="#1f6b4f" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button></div></header>
+<div class="scrim" id="scrim"></div>
+<nav class="drawer" id="drawer"></nav>
+<div class="wrap">
+  <div id="view"></div>
+  <div class="demo">نموذج تجريبي: البيانات وهمية وتضيع عند إعادة التحميل</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SURAHS=["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
+const JUZ=["البقرة (٣)", "البقرة (٢)", "البقرة (١)", "ال عمران (٢)", "ال عمران (١)", "النساء", "المائدة", "الأنعام (٢)", "الأنعام (١)", "الأعراف", "التوبة", "يونس", "يوسف", "الحجر", "الإسراء", "مريم", "الأنبياء", "المؤمنون", "الفرقان", "النمل", "الروم", "الأحزاب", "يس", "الزمر", "الشورى", "الأحقاف", "الذاريات", "المجادلة", "تبارك", "عم"];
+const DAY=864e5;
+const ar=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const juzName=n=>"جزء "+JUZ[n-1];
+const rangeTitle=r=>r.mode==="seg"?segLabel(r.g):r.mode==="ayah"?"سورة "+SURAHS[r.surah-1]+"، "+(r.from===r.to?"آية "+ar(r.from):"من آية "+ar(r.from)+" إلى آية "+ar(r.to)):r.mode==="juz"
+  ?(r.from===r.to?juzName(r.from):"من "+juzName(r.from)+" إلى "+juzName(r.to))
+  :(r.from===r.to?"سورة "+SURAHS[r.from-1]:"من "+SURAHS[r.from-1]+" إلى "+SURAHS[r.to-1]);
+const dayDate=d=>new Date(Date.now()-d*DAY);
+const dayLabel=d=>d===0?"اليوم":d===1?"أمس":dayDate(d).toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{weekday:"long",day:"numeric",month:"long"});
+const hijri=d=>dayDate(d).toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"});
+const gregShort=d=>dayDate(d).toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long"});
+const dayFull=d=>dayDate(d).toLocaleDateString("ar-SA-u-ca-islamic-umalqura",{weekday:"long",day:"numeric",month:"long"});
+
+/* بيانات تجريبية */
+const STUDENTS=[
+ {id:1,name:"محمد",mode:"juz",rate:.9},{id:2,name:"أحمد",mode:"juz",rate:.8},{id:3,name:"عبدالرحمن",mode:"juz",rate:.5},
+ {id:4,name:"يوسف",mode:"juz",rate:.2},{id:5,name:"خالد",mode:"juz",rate:.7},{id:6,name:"سلمان",mode:"surah",rate:.85},
+ {id:7,name:"فهد",mode:"surah",rate:.4},{id:8,name:"عمر",mode:"surah",rate:.1}];
+let rid=0;const REVIEWS=[];
+const h=(a,b)=>((a*2654435761+b*40503)>>>0)%100;
+STUDENTS.forEach(s=>{for(let d=0;d<30;d++){
+  if(h(s.id,d)<s.rate*100){
+    if(s.mode==="juz"){const f=1+h(s.id,d+50)%30;const multi=h(s.id,d+9)<25;const t=multi?Math.min(30,f+1+h(s.id,d+3)%2):f;REVIEWS.push({id:++rid,sid:s.id,d,mode:"juz",from:t,to:f})}
+    else{const f=78+h(s.id,d+50)%36;const multi=h(s.id,d+9)<35;const t=multi?Math.min(114,f+1+h(s.id,d+3)%3):f;REVIEWS.push({id:++rid,sid:s.id,d,mode:"surah",from:f,to:t})}
+  }}});
+
+const AY=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6];
+const PROG={1:{s:2,a:120},2:{s:4,a:45},3:{s:18,a:60},4:{s:36,a:20},5:{s:67,a:10},6:{s:78,a:15},7:{s:93,a:5},8:{s:105,a:3}};
+STUDENTS.forEach(s=>{s.phone="050000000"+s.id;s.p=PROG[s.id]});
+const HEARD=[];
+STUDENTS.forEach(s=>{for(let k=0;k<3;k++){const d=2+k*7+h(s.id,k)%4;const sn=1+h(s.id,d+70)%114,a=1+h(s.id,d+71)%AY[sn-1],b=Math.min(AY[sn-1],a+2+h(s.id,d+72)%10);HEARD.push({id:++rid,sid:s.id,d,mode:"ayah",surah:sn,from:a,to:b})}});
+const NOTES=["ما شاء الله، تلاوة متقنة.","أخطأ في موضعين، يحتاج إعادة مراجعة.","جيد، انتبه للمدود.","ممتاز، استمر على هذا المستوى."];
+HEARD.forEach((r,i)=>{if(i%3!==1){r.note=NOTES[i%4];r.nt=["good","warn","warn","good"][i%4]}});
+const READY=[];
+const ago=t=>{const m=Math.max(1,Math.round((Date.now()-t)/60000));return m<60?"منذ "+ar(m)+" دقيقة":"منذ "+ar(Math.round(m/60))+" ساعة"};
+const SEGDATA=[[[114,1,112,4],[111,1,109,6],[108,1,106,4],[105,1,103,3],[102,1,101,11],[100,1,99,8],[98,1,97,5],[96,1,95,8],[94,1,93,11],[92,1,91,15],[90,1,90,20],[89,1,89,30],[88,1,88,26],[87,1,86,17],[85,1,85,22],[84,1,84,25],[83,1,83,36],[82,1,82,19],[81,1,81,29],[80,1,80,42],[79,1,79,26],[79,27,79,46],[78,1,78,20],[78,21,78,40]],[[77,1,77,24],[77,25,77,50],[76,1,76,18],[76,19,76,31],[75,1,75,40],[74,1,74,31],[74,32,74,56],[73,1,73,14],[73,15,73,20],[72,1,72,13],[72,14,72,28],[71,1,71,12],[71,13,71,28],[70,1,70,18],[70,19,70,44],[69,1,69,18],[69,19,69,52],[68,1,68,33],[68,34,68,52],[67,1,67,15],[67,16,67,30]],[[66,1,66,7],[66,8,66,12],[65,1,65,5],[65,6,65,12],[64,1,64,9],[64,10,64,18],[63,1,63,4],[63,5,63,11],[62,1,62,11],[61,1,61,9],[61,10,61,14],[60,1,60,7],[60,8,60,13],[59,1,59,5],[59,6,59,10],[59,11,59,17],[59,18,59,24],[58,1,58,4],[58,5,58,8],[58,9,58,13],[58,14,58,22]],[[57,1,57,11],[57,12,57,17],[57,18,57,24],[57,25,57,29],[56,1,56,26],[56,27,56,56],[56,57,56,74],[56,75,56,96],[55,1,55,25],[55,26,55,45],[55,46,55,78],[54,1,54,17],[54,18,54,40],[54,41,54,55],[53,1,53,25],[53,26,53,32],[53,33,53,62],[52,1,52,28],[52,29,52,49],[51,1,51,23],[51,24,51,46],[51,47,51,60]],[[50,1,50,15],[50,16,50,35],[50,36,50,45],[49,1,49,8],[49,9,49,13],[49,14,49,18],[48,1,48,9],[48,10,48,15],[48,16,48,23],[48,24,48,26],[48,27,48,29],[47,1,47,11],[47,12,47,19],[47,20,47,29],[47,30,47,38],[46,1,46,8],[46,9,46,14],[46,15,46,20],[46,21,46,28],[46,29,46,35]],[[45,1,45,11],[45,12,45,20],[45,21,45,26],[45,27,45,37],[44,1,44,16],[44,17,44,33],[44,34,44,42],[44,43,44,59],[43,1,43,14],[43,15,43,25],[43,26,43,35],[43,36,43,45],[43,46,43,56],[43,57,43,66],[43,67,43,80],[43,81,43,89],[42,1,42,12],[42,13,42,15],[42,16,42,22],[42,23,42,31],[42,32,42,43],[42,44,42,48],[42,49,42,53]],[[41,1,41,12],[41,13,41,18],[41,19,41,29],[41,30,41,39],[41,40,41,46],[41,47,41,54],[40,1,40,9],[40,10,40,20],[40,21,40,27],[40,28,40,33],[40,34,40,37],[40,38,40,46],[40,47,40,52],[40,53,40,60],[40,61,40,68],[40,69,40,77],[40,78,40,85],[39,1,39,5],[39,6,39,10],[39,11,39,20],[39,21,39,26],[39,27,39,37],[39,38,39,44],[39,45,39,52],[39,53,39,59],[39,60,39,70],[39,71,39,75]],[[38,1,38,16],[38,17,38,29],[38,30,38,44],[38,45,38,64],[38,65,38,88],[37,1,37,21],[37,22,37,49],[37,50,37,74],[37,75,37,98],[37,99,37,122],[37,123,37,148],[37,149,37,182],[36,1,36,19],[36,20,36,32],[36,33,36,40],[36,41,36,54],[36,55,36,70],[36,71,36,83]],[[35,1,35,8],[35,9,35,14],[35,15,35,28],[35,29,35,35],[35,36,35,41],[35,42,35,45],[34,1,34,5],[34,6,34,13],[34,14,34,19],[34,20,34,27],[34,28,34,33],[34,34,34,39],[34,40,34,45],[34,46,34,54],[33,1,33,6],[33,7,33,17],[33,18,33,24],[33,25,33,31],[33,32,33,35],[33,36,33,44],[33,45,33,50],[33,51,33,55],[33,56,33,62],[33,63,33,73]],[[32,1,32,9],[32,10,32,17],[32,18,32,30],[31,1,31,11],[31,12,31,19],[31,20,31,28],[31,29,31,34],[30,1,30,10],[30,11,30,21],[30,22,30,27],[30,28,30,32],[30,33,30,41],[30,42,30,50],[30,51,30,60]],[[29,1,29,9],[29,10,29,18],[29,19,29,27],[29,28,29,35],[29,36,29,40],[29,41,29,47],[29,48,29,52],[29,53,29,60],[29,61,29,69],[28,1,28,11],[28,12,28,19],[28,20,28,28],[28,29,28,35],[28,36,28,43],[28,44,28,50],[28,51,28,59],[28,60,28,67],[28,68,28,75],[28,76,28,81],[28,82,28,88],[27,1,27,14],[27,15,27,19],[27,20,27,28],[27,29,27,37],[27,38,27,44],[27,45,27,53],[27,54,27,58],[27,59,27,66],[27,67,27,81],[27,82,27,93]],[[26,1,26,22],[26,23,26,40],[26,41,26,51],[26,52,26,68],[26,69,26,89],[26,90,26,104],[26,105,26,122],[26,123,26,140],[26,141,26,159],[26,160,26,175],[26,176,26,191],[26,192,26,212],[26,213,26,227],[25,1,25,10],[25,11,25,20],[25,21,25,34],[25,35,25,44],[25,45,25,52],[25,53,25,62],[25,63,25,77]],[[24,1,24,10],[24,11,24,20],[24,21,24,26],[24,27,24,31],[24,32,24,38],[24,39,24,45],[24,46,24,54],[24,55,24,59],[24,60,24,61],[24,62,24,64],[23,1,23,17],[23,18,23,30],[23,31,23,44],[23,45,23,61],[23,62,23,77],[23,78,23,92],[23,93,23,104],[23,105,23,118]],[[22,1,22,7],[22,8,22,15],[22,16,22,24],[22,25,22,29],[22,30,22,37],[22,38,22,46],[22,47,22,55],[22,56,22,66],[22,67,22,72],[22,73,22,78],[21,1,21,10],[21,11,21,24],[21,25,21,35],[21,36,21,41],[21,42,21,50],[21,51,21,70],[21,71,21,77],[21,78,21,86],[21,87,21,95],[21,96,21,103],[21,104,21,112]],[[20,1,20,16],[20,17,20,37],[20,38,20,48],[20,49,20,55],[20,56,20,69],[20,70,20,79],[20,80,20,89],[20,90,20,98],[20,99,20,114],[20,115,20,127],[20,128,20,135],[19,1,19,11],[19,12,19,21],[19,22,19,33],[19,34,19,40],[19,41,19,50],[19,51,19,58],[19,59,19,72],[19,73,19,87],[19,88,19,98]],[[18,1,18,8],[18,9,18,16],[18,17,18,20],[18,21,18,26],[18,27,18,31],[18,32,18,44],[18,45,18,50],[18,51,18,59],[18,60,18,70],[18,71,18,82],[18,83,18,98],[18,99,18,110],[17,1,17,8],[17,9,17,17],[17,18,17,27],[17,28,17,38],[17,39,17,48],[17,49,17,58],[17,59,17,65],[17,66,17,70],[17,71,17,82],[17,83,17,89],[17,90,17,96],[17,97,17,104],[17,105,17,111]],[[16,1,16,9],[16,10,16,18],[16,19,16,29],[16,30,16,35],[16,36,16,42],[16,43,16,55],[16,56,16,64],[16,65,16,69],[16,70,16,76],[16,77,16,83],[16,84,16,89],[16,90,16,93],[16,94,16,102],[16,103,16,111],[16,112,16,118],[16,119,16,128],[15,1,15,15],[15,16,15,25],[15,26,15,44],[15,45,15,60],[15,61,15,77],[15,78,15,99]],[[14,1,14,8],[14,9,14,12],[14,13,14,18],[14,19,14,23],[14,24,14,33],[14,34,14,41],[14,42,14,52],[13,1,13,4],[13,5,13,11],[13,12,13,17],[13,18,13,27],[13,28,13,34],[13,35,13,43],[12,1,12,10],[12,11,12,18],[12,19,12,22],[12,23,12,29],[12,30,12,35],[12,36,12,42],[12,43,12,52],[12,53,12,62],[12,63,12,68],[12,69,12,76],[12,77,12,83],[12,84,12,92],[12,93,12,101],[12,102,12,111]],[[11,1,11,6],[11,7,11,14],[11,15,11,24],[11,25,11,34],[11,35,11,40],[11,41,11,49],[11,50,11,60],[11,61,11,68],[11,69,11,76],[11,77,11,83],[11,84,11,88],[11,89,11,99],[11,100,11,108],[11,109,11,115],[11,116,11,123],[10,1,10,6],[10,7,10,14],[10,15,10,20],[10,21,10,25],[10,26,10,30],[10,31,10,36],[10,37,10,44],[10,45,10,56],[10,57,10,64],[10,65,10,70],[10,71,10,78],[10,79,10,89],[10,90,10,97],[10,98,10,103],[10,104,10,109]],[[9,1,9,6],[9,7,9,11],[9,12,9,18],[9,19,9,24],[9,25,9,29],[9,30,9,35],[9,36,9,37],[9,38,9,41],[9,42,9,49],[9,50,9,55],[9,56,9,61],[9,62,9,68],[9,69,9,72],[9,73,9,80],[9,81,9,89],[9,90,9,93],[9,94,9,100],[9,101,9,106],[9,107,9,112],[9,113,9,116],[9,117,9,121],[9,122,9,129]],[[8,1,8,8],[8,9,8,14],[8,15,8,19],[8,20,8,29],[8,30,8,37],[8,38,8,44],[8,45,8,51],[8,52,8,60],[8,61,8,66],[8,67,8,71],[8,72,8,75],[7,1,7,10],[7,11,7,25],[7,26,7,30],[7,31,7,37],[7,38,7,43],[7,44,7,51],[7,52,7,58],[7,59,7,64],[7,65,7,72],[7,73,7,79]],[[7,80,7,87],[7,88,7,95],[7,96,7,102],[7,103,7,112],[7,113,7,126],[7,127,7,136],[7,137,7,143],[7,144,7,149],[7,150,7,155],[7,156,7,158],[7,159,7,163],[7,164,7,171],[7,172,7,178],[7,179,7,187],[7,188,7,195],[7,196,7,206],[6,1,6,7],[6,8,6,18],[6,19,6,26],[6,27,6,35]],[[6,36,6,45],[6,46,6,52],[6,53,6,59],[6,60,6,67],[6,68,6,73],[6,74,6,83],[6,84,6,90],[6,91,6,94],[6,95,6,99],[6,100,6,108],[6,109,6,117],[6,118,6,124],[6,125,6,131],[6,132,6,137],[6,138,6,142],[6,143,6,147],[6,148,6,153],[6,154,6,158],[6,159,6,165]],[[5,1,5,3],[5,4,5,6],[5,7,5,11],[5,12,5,13],[5,14,5,17],[5,18,5,23],[5,24,5,31],[5,32,5,37],[5,38,5,43],[5,44,5,47],[5,48,5,50],[5,51,5,58],[5,59,5,64],[5,65,5,71],[5,72,5,77],[5,78,5,86],[5,87,5,89],[5,90,5,95],[5,96,5,102],[5,103,5,108],[5,109,5,115],[5,116,5,120]],[[4,1,4,6],[4,7,4,10],[4,11,4,12],[4,13,4,18],[4,19,4,23],[4,24,4,25],[4,26,4,33],[4,34,4,40],[4,41,4,46],[4,47,4,55],[4,56,4,59],[4,60,4,65],[4,66,4,73],[4,74,4,79],[4,80,4,87],[4,88,4,91],[4,92,4,94]],[[4,95,4,100],[4,101,4,104],[4,105,4,113],[4,114,4,121],[4,122,4,126],[4,127,4,130],[4,131,4,139],[4,140,4,147],[4,148,4,152],[4,153,4,161],[4,162,4,166],[4,167,4,172],[4,173,4,176],[3,1,3,9],[3,10,3,17],[3,18,3,22],[3,23,3,30]],[[3,31,3,37],[3,38,3,44],[3,45,3,51],[3,52,3,61],[3,62,3,68],[3,69,3,77],[3,78,3,83],[3,84,3,92],[3,93,3,101],[3,102,3,109],[3,110,3,115],[3,116,3,120],[3,121,3,123],[3,124,3,136],[3,137,3,144],[3,145,3,151],[3,152,3,155]],[[3,156,3,165],[3,166,3,175],[3,176,3,180],[3,181,3,186],[3,187,3,195],[3,196,3,200],[2,1,2,16],[2,17,2,24],[2,25,2,29],[2,30,2,39],[2,40,2,48],[2,49,2,57],[2,58,2,62],[2,63,2,73],[2,74,2,79],[2,80,2,83],[2,84,2,88]],[[2,89,2,93],[2,94,2,101],[2,102,2,105],[2,106,2,112],[2,113,2,119],[2,120,2,126],[2,127,2,134],[2,135,2,141],[2,142,2,145],[2,146,2,152],[2,153,2,162],[2,163,2,169],[2,170,2,176],[2,177,2,182],[2,183,2,186],[2,187,2,190],[2,191,2,196]],[[2,197,2,203],[2,204,2,210],[2,211,2,215],[2,216,2,220],[2,221,2,225],[2,226,2,230],[2,231,2,233],[2,234,2,237],[2,238,2,245],[2,246,2,248],[2,249,2,252],[2,253,2,256],[2,257,2,260],[2,261,2,264],[2,265,2,269],[2,270,2,274],[2,275,2,281],[2,282,2,283],[2,284,2,286]]];
+const segOfJuz=n=>SEGDATA[Math.max(0,Math.min(29,30-n))].length;
+const segN=x=>SEGDATA[Math.min(x.jd,29)].length;
+const segLabel=g=>{const S=SURAHS,[s0,a0,s1,a1]=g;if(s0===s1)return a0===1&&a1===AY[s0-1]?'سورة '+S[s0-1]+' كاملة':'سورة '+S[s0-1]+'، من آية '+ar(a0)+' إلى آية '+ar(a1);return 'من سورة '+S[s0-1]+(a0===1?'':' (آية '+ar(a0)+')')+' إلى '+(a1===AY[s1-1]?'نهاية سورة '+S[s1-1]:'سورة '+S[s1-1]+' (آية '+ar(a1)+')')};
+const MAJOR="الشيخ بندر";
+const SH=[{id:"b",name:"الشيخ بندر"},{id:"s1",name:"الشيخ عاصم",role:"sard",avail:true,phone:"0522222221"},{id:"s2",name:"الشيخ ياسين",role:"sard",avail:false,phone:"0522222222"},{id:"e1",name:"الشيخ ياسين",role:"exam",avail:true,phone:"0533333331"},{id:"e2",name:"الشيخ محمد",role:"exam",avail:true,phone:"0533333332"},{id:"r1",name:"الشيخ محمد",role:"ribt",avail:true,phone:"0544444441"},{id:"r2",name:"الشيخ عاصم",role:"ribt",avail:false,phone:"0544444442"}];
+const JD={1:22,2:15,3:8,4:5,5:27,6:2,7:1,8:1}, SG={1:99,2:4,3:4,4:2,5:4,6:1,7:0,8:2};
+STUDENTS.forEach(x=>{x.jd=JD[x.id];x.sg=Math.min(SG[x.id],segN(x));if(x.jd<30){const P=SEGDATA[x.jd];x.p=x.sg>0?{s:P[x.sg-1][2],a:P[x.sg-1][3]}:{s:P[0][0],a:P[0][1]}}});
+[[5,12],[6,4]].forEach(([id,m])=>{const x=STUDENTS.find(s=>s.id===id);READY.push({sid:id,at:Date.now()-m*60000,mode:"seg",g:SEGDATA[x.jd][Math.min(x.sg,segN(x)-1)]})});
+let reqId=0;
+const REQS=[
+ {id:++reqId,sid:2,juz:15,stage:"sard",at:Date.now()-2*DAY,sard:{by:"s1"}},
+ {id:++reqId,sid:5,juz:3,stage:"exam_done",at:Date.now()-4*DAY,sard:{by:"s1",note:"سرد متقن، تردد في موضع واحد.",at:Date.now()-3*DAY},exam:{by:"e1",grade:92,note:"أداء ممتاز.",at:Date.now()-DAY}},
+ {id:++reqId,sid:3,juz:22,stage:"new",at:Date.now()-3600000}];
+const TD=new Date().getDay();
+const wkOf=d=>d<=TD?0:Math.ceil((d-TD)/7);
+let rbId=0;
+const RB=[
+ {id:++rbId,sid:2,d:0,dd:0,stage:"done",by:"r1",juz:15,segs:4,note:"ربط متقن، تردد في المقطع الثالث."},
+ {id:++rbId,sid:5,d:0,stage:"ribt",by:"r1",juz:3,segs:4},
+ {id:++rbId,sid:3,d:0,stage:"new",juz:22,segs:4},
+ {id:++rbId,sid:1,d:TD+3,dd:TD+2,stage:"done",by:"r1",juz:8,segs:3,note:"جيد، راجع المقطع الأول."},
+ {id:++rbId,sid:2,d:TD+9,dd:TD+8,stage:"done",by:"r1",juz:15,segs:2,note:""}];
+const shName=id=>SH.find(x=>x.id===id).name;
+const stu=id=>STUDENTS.find(x=>x.id===id);
+const curJuz=x=>30-x.jd;
+const activeReq=sid=>REQS.find(r=>r.sid===sid&&r.stage!=="approved"&&r.stage!=="rejected");
+const lastReq=sid=>REQS.filter(r=>r.sid===sid).sort((a,b)=>b.id-a.id)[0];
+const STG={new:"بانتظار توجيه المشرف لشيخ السرد",sard_done:"تم السرد، بانتظار توجيه المشرف لشيخ الاختبار",exam_done:"تم الاختبار، بانتظار اعتماد المشرف",approved:"اُعتمد النجاح",rejected:"لم يُعتمد النجاح"};
+const stageText=r=>r.stage==="sard"?"عند "+shName(r.sard.by)+" للسرد":r.stage==="exam"?"عند "+shName(r.exam.by)+" للاختبار":STG[r.stage];
+const BADGE={new:["جديد","b-r"],sard:["قيد التنفيذ","b-a"],sard_done:["تم السرد","b-g"],exam:["قيد التنفيذ","b-a"],exam_done:["بانتظار الاعتماد","b-a"],approved:["ناجح","b-g"],rejected:["لم يُعتمد","b-r"]};
+const sardNote=r=>r.sard&&r.sard.at&&r.sard.note?`<div class="note info"><b>ملاحظات السرد (${shName(r.sard.by)}):</b> ${esc(r.sard.note)}</div>`:"";
+const dbox=(l,d,none)=>`<div class="stat sm"><div class="l">${l}</div><div class="n">${d===undefined||d<0?none:dayLabel(d)}</div><div class="sb">${d!==undefined&&d>=0&&d<2?gregShort(d):""}</div></div>`;
+const agoT=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?"الآن":m<60?"منذ "+ar(m)+" دقيقة":m<1440?"منذ "+ar(Math.round(m/60))+" ساعة":dayLabel(Math.floor((Date.now()-t)/DAY))};
+const SHID={major:"b",sard:"s1",exam:"e1",ribt:"r1"};
+const roleLabel=h=>h==="b"?"المشرف":({sard:"شيخ السرد",exam:"شيخ الاختبار",ribt:"شيخ الربط"})[(SH.find(y=>y.id===h)||{}).role]||"شيخ";
+const now0=Date.now();
+let convId=0;
+const CONV=[
+ {id:++convId,sid:1,hid:"b",msgs:[{f:"h",t:"السلام عليكم، هل أنت متاح للاتصال الآن؟",at:now0-50*60000,seen:true},{f:"s",t:"متاح الآن",at:now0-45*60000,seen:false}]},
+ {id:++convId,sid:4,hid:"b",msgs:[{f:"h",t:"السلام عليكم، هل أنت متاح للاتصال الآن؟",at:now0-3*3600000,seen:false}]},
+ {id:++convId,sid:1,hid:"r1",msgs:[{f:"h",t:"بارك الله فيك على الربط، استمر.",at:now0-20*60000,seen:false}]},
+ {id:++convId,sid:2,hid:"s1",msgs:[{f:"s",t:"جاهز للسرد بعد العصر",at:now0-10*60000,seen:false}]}];
+function whoAmI(){return state.view==="student"?{role:"s",id:state.me}:{role:"h",id:SHID[state.view]}}
+const mineConvs=()=>{const m=whoAmI();return CONV.filter(c=>m.role==="s"?c.sid===m.id:c.hid===m.id)};
+const unreadCount=()=>{const m=whoAmI();return mineConvs().reduce((a,c)=>a+c.msgs.filter(x=>x.f!==m.role&&!x.seen).length,0)};
+function getConv(sid,hid){let c=CONV.find(x=>x.sid===sid&&x.hid===hid);if(!c){c={id:++convId,sid,hid,msgs:[]};CONV.push(c)}return c}
+function openConv(id){state.conv=id;const m=whoAmI();CONV.find(x=>x.id===id).msgs.forEach(x=>{if(x.f!==m.role)x.seen=true})}
+function sendMsg(t){
+  const c=CONV.find(x=>x.id===state.conv);
+  c.msgs.push({f:whoAmI().role,t,at:Date.now(),seen:false});
+  render(true);window.scrollTo(0,(document.body||{}).scrollHeight||0);
+}
+function contacts(){
+  const me=whoAmI();
+  if(me.role==="s"){const ids=new Set(["b"]);REQS.filter(r=>r.sid===me.id).forEach(r=>{if(r.sard)ids.add(r.sard.by);if(r.exam)ids.add(r.exam.by)});RB.filter(r=>r.sid===me.id&&r.by).forEach(r=>ids.add(r.by));
+    return [...ids].map(h=>({sid:me.id,hid:h,name:shName(h),sub:roleLabel(h)}))}
+  if(me.id==="b")return STUDENTS.map(x=>({sid:x.id,hid:"b",name:x.name,sub:"طالب"}));
+  const ids=new Set();REQS.forEach(r=>{if((r.sard&&r.sard.by===me.id)||(r.exam&&r.exam.by===me.id))ids.add(r.sid)});RB.forEach(r=>{if(r.by===me.id)ids.add(r.sid)});
+  return [...ids].map(sid=>({sid,hid:me.id,name:stu(sid).name,sub:"طالب"}));
+}
+function chatsList(){
+  const me=whoAmI(),last=c=>c.msgs[c.msgs.length-1];
+  const list=mineConvs().filter(c=>c.msgs.length).sort((a,b)=>last(b).at-last(a).at);
+  const row=c=>{const l=last(c),other=me.role==="s"?shName(c.hid):stu(c.sid).name,un=c.msgs.filter(m=>m.f!==me.role&&!m.seen).length;
+    return `<button class="st" data-openconv="${c.id}"><span class="no">${other.replace("الشيخ ","")[0]}</span><span style="min-width:0;flex:1"><div class="nm">${other}</div><div class="d" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.f===me.role?"أنت: ":""}${esc(l.t)}</div></span><span style="text-align:left;flex:none"><div class="d" style="font-size:12px">${agoT(l.at)}</div>${un?`<span class="cnt">${ar(un)}</span>`:""}</span></button>`};
+  return `<h1>المحادثات</h1>`+(list.length?list.map(row).join(""):`<div class="card d" style="text-align:center">لا توجد محادثات بعد<br>اضغط ＋ لبدء محادثة جديدة</div>`)+`<button class="fab" data-newchat="1" aria-label="محادثة جديدة">＋</button>`;
+}
+function pickerView(){
+  const me=whoAmI(),cs=contacts();
+  return `<button class="back" data-ncback="1">→ رجوع</button><h1>محادثة جديدة</h1>`+(cs.length?cs.map(c=>{const ex=CONV.find(x=>x.sid===c.sid&&x.hid===c.hid&&x.msgs.length);
+    return `<button class="st" data-newconv="${c.sid}:${c.hid}"><span class="no">${c.name.replace("الشيخ ","")[0]}</span><span><div class="nm">${c.name}</div><div class="d">${c.sub}${ex?" · محادثة موجودة":""}</div></span><span class="arr">‹</span></button>`}).join(""):`<div class="card d" style="text-align:center">لا توجد جهات متاحة للمحادثة الآن</div>`);
+}
+function chatView(id){
+  const c=CONV.find(x=>x.id===id),me=whoAmI(),x=stu(c.sid);
+  const other=me.role==="s"?shName(c.hid):x.name,sub=me.role==="s"?roleLabel(c.hid):"طالب";
+  const quick=me.role==="h"?["هل أنت متاح للاتصال الآن؟"]:["متاح الآن","غير متاح الآن","متاح بعد ١٥ دقيقة"];
+  return `<div class="chead"><button class="back" data-cback="1" style="margin:0;font-size:24px" aria-label="رجوع">→</button><div style="flex:1;min-width:0"><div style="font-weight:800;font-size:18px">${other}</div><div class="d">${sub}</div></div>${me.role==="h"?`<a class="phone" href="tel:${x.phone}" aria-label="اتصال بالطالب">📞</a>`:""}</div>
+  <div class="card" style="min-height:160px;display:flex;flex-direction:column;gap:8px">${c.msgs.length?c.msgs.map(m=>`<div style="align-self:${m.f===me.role?"flex-start":"flex-end"};max-width:82%;background:${m.f===me.role?"var(--green2)":"var(--bg)"};border:1px solid var(--line);border-radius:14px;padding:8px 12px"><div>${esc(m.t)}</div><div class="d" style="font-size:11px">${agoT(m.at)}</div></div>`).join(""):'<div class="d" style="margin:auto">ابدأ المحادثة</div>'}</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">${quick.map(q=>`<button class="chip" data-qsend="${esc(q)}">${q}</button>`).join("")}</div>
+  <div style="display:flex;gap:8px"><textarea id="cmsg" rows="1" placeholder="اكتب رسالة…" style="flex:1"></textarea><button class="btn" id="csend" style="width:90px;margin:0;min-height:48px;font-size:16px">إرسال</button></div>`;
+}
+const state={view:"student",tab:"daily",hear:null,me:1,day:0,open:null,draft:{mode:"juz",multi:false,from:30,to:30},err:"",herr:"",stab:"home",rp:"home",wk:0,conv:null,newchat:false,lim:{heard:3,rev:3,ribt:3},noteEdit:null,editId:null,delId:null,delHid:null,rd:{s:2,from:1,to:10,err:""},rejId:null,apc:false,sheet:false,notifs:false,dsheet:null,pe:null,pd:null};
+const $=s=>document.querySelector(s);
+const ntSelect=(id,v)=>`<select class="ntsel" id="${id}" data-v="${v||""}" style="margin-top:10px"><option value="" ${!v?"selected":""}>نوع الملاحظة (اختياري)</option><option value="good" ${v==="good"?"selected":""}>🟢 إشادة</option><option value="warn" ${v==="warn"?"selected":""}>🔴 تنبيه</option></select>`;
+const noteHtml=(r,who)=>r.note?`<div class="note ${r.nt}"><b>${r.nt==="warn"?"⚠ تنبيه":"✓ إشادة"}${who?"":" من الشيخ"}:</b> ${esc(r.note)}</div>`:"";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800)}
+const of=(sid,d)=>REVIEWS.filter(r=>r.sid===sid&&r.d===d);
+const okOf=(sid,d)=>of(sid,d).filter(r=>r.st!=="rej");
+const APD=new Set();for(let d=2;d<30;d++)APD.add(d);
+for(let i=REVIEWS.length-1;i>=0;i--)if(REVIEWS[i].sid===1&&REVIEWS[i].d===0)REVIEWS.splice(i,1);
+REVIEWS.forEach(r=>{r.st=r.d>=2?"ok":"pend"});
+const NOTIF=[{id:1,sid:1,t:"جزء تبارك",d:1,rn:"الجزء المكتوب غير صحيح، سجّلها من جديد"}];let nid=1;
+const openDay=()=>{for(let d=29;d>=0;d--)if(!APD.has(d))return d;return 0};
+state.day=openDay();
+const stBadge=r=>{const m=r.st==="ok"?["b-g","معتمدة"]:r.st==="rej"?["b-r","مرفوضة"]:["b-a","بانتظار الاعتماد"];return `<span class="badge ${m[0]}" style="font-size:12px;padding:2px 9px">${m[1]}</span>`+(r.st==="rej"&&r.rn?`<div style="color:var(--red);font-size:14px;margin-top:4px">السبب: ${esc(r.rn)}</div>`:"")};
+const names=list=>list.map(rangeTitle).join("، ");
+
+/* ===== الطالب ===== */
+function studentView(){
+  const k=state.stab;
+  return k==="me"?studentProfile():k==="exam"?studentExam():k==="notes"?studentNotes():k==="plan"?studentPlan():k==="history"?studentHistory():k==="ribt"?studentRibt():k==="chats"?chatsList():studentHome();
+}
+function reviewRow(r){
+  return `<div class="hist"><div>${rangeTitle(r)}</div><div class="d">${dayLabel(r.d)}</div><div style="margin-top:4px">${stBadge(r)}</div>
+  ${r.st==="ok"?"":state.delId===r.id?`<div class="act"><button class="c" style="background:var(--red)" data-delyes="${r.id}">نعم، احذف</button><button class="g" data-delno="1">لا</button></div>`
+  :`<div style="display:flex;gap:14px"><button class="back" data-redit="${r.id}" style="font-size:14px;margin:2px 0 0">✎ تعديل</button><button class="back" data-rdel="${r.id}" style="font-size:14px;margin:2px 0 0;color:var(--red)">🗑 حذف</button></div>`}</div>`;
+}
+function studentNotes(){
+  const hs=HEARD.filter(x=>x.sid===state.me&&x.note).sort((a,b)=>a.d-b.d||b.id-a.id);
+  return `<h1>ملاحظات الشيخ</h1>`+(hs.length?hs.map(r=>`<div class="card"><div class="d">${dayLabel(r.d)}</div><div>${rangeTitle(r)}</div>${noteHtml(r)}</div>`).join(""):`<div class="card d" style="text-align:center">لا توجد ملاحظات بعد</div>`);
+}
+function studentHistory(){
+  const all=REVIEWS.filter(r=>r.sid===state.me).sort((a,b)=>a.d-b.d||b.id-a.id);
+  return `<h1>سجل المراجعات</h1><div class="card">${all.length?all.map(reviewRow).join(""):'<div class="d">لا توجد مراجعات</div>'}</div>`;
+}
+function studentProfile(){return profileView(stu(state.me),"s")}
+function reviewForm(){
+  const d=state.draft,isJ=d.mode==="juz";
+  const list=isJ?JUZ.map((_,i)=>juzName(i+1)):SURAHS.map((s,i)=>ar(i+1)+". "+s);
+  const opt=v=>{const idx=list.map((_,i)=>i+1);if(isJ)idx.reverse();return idx.map(n=>`<option value="${n}" ${n==v?"selected":""}>${list[n-1]}</option>`).join("")};
+  return `<div class="card"><div style="font-weight:700;margin-bottom:10px">${state.editId?"تعديل المراجعة":"تسجيل مراجعة"}</div><div class="seg" data-seg="mode">${[["juz","بالأجزاء"],["surah","بالسور"]].map(x=>`<button data-val="${x[0]}" class="${d.mode===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>
+    <label>الكمية</label>
+    <div class="seg" data-seg="multi">${[["0",isJ?"جزء واحد":"سورة واحدة"],["1",isJ?"أكثر من جزء":"أكثر من سورة"]].map(x=>`<button data-val="${x[0]}" class="${(d.multi?"1":"0")===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>
+    ${d.multi
+      ?`<div class="row2"><div><label>من</label><select id="from">${opt(d.from)}</select></div><div><label>إلى</label><select id="to">${opt(d.to)}</select></div></div>`
+      :`<label>${isJ?"الجزء":"السورة"}</label><select id="from">${opt(d.from)}</select>`}
+    ${state.err?`<div class="err">${state.err}</div>`:""}
+    <button class="btn" id="add">${state.editId?"حفظ التعديل":"سجّلت المراجعة"}</button>${state.editId?`<button class="btn ghost" id="canceledit" style="margin-top:8px">إلغاء التعديل</button>`:""}</div>`;
+}
+function studentHome(){
+  const me=STUDENTS.find(s=>s.id===state.me);
+  const todays=okOf(me.id,0);
+  return `  ${(()=>{const i=READY.findIndex(x=>x.sid===me.id);
+    if(i>=0){const r=READY[i];return `<div class="done">🟢 بانتظار الشيخ، ترتيبك ${ar(i+1)}<div style="font-weight:400;margin-top:2px">${rangeTitle(r)}</div></div><button class="btn" id="unready" style="margin-bottom:14px;background:var(--red);color:#fff;border-color:var(--red)">إلغاء الجاهزية</button>`}
+    const rd=state.rd;
+    if(me.jd>=30)return `<div class="card d" style="text-align:center">أتممت حفظ كل الأجزاء، ما شاء الله 🌟</div>`;
+    const P=SEGDATA[me.jd],si=rd.si!==undefined&&rd.si<P.length?rd.si:Math.min(me.sg,P.length-1);
+    return `<div class="card"><div style="font-weight:700;margin-bottom:2px">التسميع</div><div class="d" style="margin-bottom:6px">مقاطع ${juzName(curJuz(me))}، وتنفتح مقاطع الجزء التالي بعد اجتياز الاختبار.</div>
+    <label>المقطع</label><select id="rseg">${P.map((g,k)=>`<option value="${k}" ${k===si?"selected":""}>${k<me.sg?"✓ ":""}${ar(k+1)}. ${segLabel(g)}</option>`).join("")}</select>
+    ${rd.err?`<div class="err">${rd.err}</div>`:""}
+    <button class="btn" id="ready">🟢 جاهز</button></div>`})()}
+  ${todays.length?`<div class="done">✓ تم التسجيل<div style="font-weight:400;margin-top:2px">${rangeTitle(todays.reduce((a,b)=>b.id>a.id?b:a))}</div></div>`:""}
+  ${reviewForm()}`;
+}
+
+/* ===== الشيخ: القائمة اليومية ===== */
+function sheikhList(){
+  const done=STUDENTS.filter(s=>okOf(s.id,state.day).length).length, total=STUDENTS.length, op=openDay(), appr=APD.has(state.day), rjN=REVIEWS.filter(r=>r.d===state.day&&r.st==='rej').length;
+  return `<h1>المراجعة اليومية</h1>
+  <div class="nav"><button data-day="1" aria-label="اليوم السابق">›</button><div class="t">${dayLabel(state.day)}<div class="d">${hijri(state.day)}</div></div><button data-day="-1" ${state.day<=op?"disabled":""} aria-label="اليوم التالي">‹</button></div>
+  ${appr?`<div class="done">✓ هذه القائمة معتمدة</div>`:state.apc?`<div class="card"><div style="font-weight:700">تأكيد اعتماد ${dayLabel(state.day)}؟</div><div class="d" style="margin:4px 0 8px">تُقبل كل المراجعات غير المرفوضة، وتنتقل القائمة لليوم التالي.${rjN?` (${ar(rjN)} مرفوضة تبقى مرفوضة)`:""}</div><div class="act"><button class="c" id="apyes">نعم، اعتمد</button><button class="g" id="apno">إلغاء</button></div></div>`:`<button class="btn" id="approve" style="margin-bottom:12px">✔ اعتماد قائمة ${dayLabel(state.day)}</button><div class="d" style="margin:-6px 2px 12px">القائمة لا تنتقل لليوم التالي إلا بعد اعتمادها.</div>`}
+  <div class="card" style="padding:12px 16px"><b>راجع ${ar(done)} من ${ar(total)}</b><div class="bar"><i style="width:${done/total*100}%"></i></div></div>
+  ${(()=>{const row=s=>{const rs=okOf(s.id,state.day),rj=of(s.id,state.day).filter(r=>r.st==="rej").length;return `<button class="st ${rs.length?"":"miss"}" data-dsheet="${s.id}"><span class="no">${ar(s.id)}</span><span><div class="nm">${s.name}</div><div class="what">${rs.length?names(rs):"لم يسجّل"}${rj?`<div style="color:var(--red)">⚠ فيها ${ar(rj)} مراجعة مرفوضة</div>`:""}</div></span><span class="arr">‹</span></button>`};
+    const yes=STUDENTS.filter(s=>okOf(s.id,state.day).length), no=STUDENTS.filter(s=>!okOf(s.id,state.day).length);
+    return (yes.length?`<div class="d" style="margin:4px 2px 8px">سجّلوا (${ar(yes.length)})</div>`+yes.map(row).join(""):"")
+      +(no.length?`<div class="d" style="margin:14px 2px 8px">لم يسجّلوا (${ar(no.length)})</div>`+no.map(row).join(""):"")})()}
+  <button class="btn ghost" id="copy" style="margin-top:6px">نسخ القائمة للواتساب</button>`;
+}
+
+/* ===== الشيخ: ملف الطالب ===== */
+function status(n){return n>=10?["منتظم","b-g"]:n>=5?["متذبذب","b-a"]:["يحتاج متابعة","b-r"]}
+function profileView(s,v){
+  const isH=v==="h";
+  const days=[];for(let d=0;d<30;d++)days.push(okOf(s.id,d).length>0);
+  const last14=days.slice(0,14).filter(Boolean).length, tot30=days.filter(Boolean).length;
+  let streak=0;for(let d=0;d<30&&days[d];d++)streak++;
+  const lastIdx=days.findIndex(Boolean);
+  const hist=[];for(let d=0;d<30;d++){const rs=of(s.id,d);if(rs.length)hist.push([d,rs])}
+  const heardAll=HEARD.filter(x=>x.sid===s.id).sort((a,b)=>a.d-b.d||b.id-a.id);
+  const rbAll=RB.filter(x=>x.sid===s.id&&x.stage==="done").sort((a,b)=>a.dd-b.dd);
+  const lr=rbAll[0],lh=heardAll[0];
+  const moreBtn=(k,total)=>`<div style="display:flex;gap:18px">${total>state.lim[k]?`<button class="back" data-more="${k}" style="margin:8px 0 0">عرض المزيد ▾</button>`:""}${state.lim[k]>3?`<button class="back" data-less="${k}" style="margin:8px 0 0">عرض أقل ▴</button>`:""}</div>`;
+  const lastS=isH?(((CONV.find(c=>c.sid===s.id&&c.hid==="b")||{}).msgs)||[]).filter(x=>x.f==="s").pop():null;
+  const revRow=r=>`<div style="padding:4px 0"><div>${rangeTitle(r)}</div><div style="margin-top:3px">${stBadge(r)}</div>`+(isH?(state.rejId===r.id?`<textarea id="rj-${r.id}" rows="2" style="margin-top:8px" placeholder="سبب الرفض (اختياري). الرفض يحذف المراجعة ويصل السبب للطالب"></textarea><div class="act"><button class="c" style="background:var(--red)" data-rrejgo="${r.id}">رفض وحذف</button><button class="g" data-rrejno="1">إلغاء</button></div>`:`<div style="display:flex;gap:14px">${r.st!=="ok"?`<button class="back" data-rok="${r.id}" style="font-size:14px;margin:2px 0 0">✓ قبول</button>`:""}${r.st!=="rej"?`<button class="back" data-rrej="${r.id}" style="font-size:14px;margin:2px 0 0;color:var(--red)">✗ رفض</button>`:""}</div>`):"")+`</div>`;
+  const heardRow=r=>`<div class="hist"><div class="d">${dayLabel(r.d)}</div><div>${rangeTitle(r)}</div>`+(!isH?noteHtml(r):
+    (state.noteEdit===r.id?`${ntSelect("nt-"+r.id,r.nt)}<textarea id="ne-${r.id}" rows="2" style="margin-top:8px" placeholder="اكتب ملاحظتك…">${esc(r.note||"")}</textarea><div class="act"><button class="c" data-notesave="${r.id}">حفظ</button><button class="g" data-notecancel="1">إلغاء</button></div>`
+    :`${noteHtml(r,true)}${state.delHid===r.id?`<div class="act"><button class="c" style="background:var(--red)" data-hdelyes="${r.id}">نعم، احذف التسميع</button><button class="g" data-hdelno="1">لا</button></div>`:`<div style="display:flex;gap:14px"><button class="back" data-noteedit="${r.id}" style="font-size:14px;margin:4px 0 0">${r.note?"✎ تعديل الملاحظة":"✎ إضافة ملاحظة"}</button><button class="back" data-hdel="${r.id}" style="font-size:14px;margin:4px 0 0;color:var(--red)">🗑 حذف</button></div>`}`))+`</div>`;
+  return (isH?`<button class="back" data-back="1">→ رجوع للقائمة</button>`:`<h1>ملفي</h1>`)+`
+  <div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no" style="width:44px;height:44px;font-size:18px">${ar(s.id)}</span>
+    <div><div style="font-size:20px;font-weight:800">${s.name}</div></div></div>
+    <div class="stats">
+    ${dbox("آخر تسميع",lh?lh.d:undefined,"لا يوجد")}
+    ${dbox("آخر مراجعة",lastIdx<0?undefined:lastIdx,"لا يوجد")}
+    ${dbox("آخر ربط أسبوعي",lr?lr.dd:undefined,"لا يوجد")}</div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:6px"><span class="d">عدد الأجزاء المحفوظة</span><b style="font-size:17px">${ar(s.jd)} من ${ar(30)}</b></div>
+    <div class="bar"><i style="width:${s.jd/30*100}%"></i></div>
+    ${s.jd<30?`<div class="d">الجزء الحالي: ${juzName(30-s.jd)}</div>`:""}</div>
+  <div class="card"><div style="font-weight:700;margin-bottom:8px">التسميع</div>
+    <div class="d">${isH?"وصل حفظه إلى":"وصل حفظي إلى"}</div><div style="font-size:19px;font-weight:800">سورة ${SURAHS[s.p.s-1]}، آية ${ar(s.p.a)}</div>
+    ${s.jd<30?`<div style="display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap"><span>المقاطع المتبقية من الجزء: <b>${ar(segN(s)-s.sg)}</b> <span class="d">(تم ${ar(s.sg)} من ${ar(segN(s))})</span></span>${isH?`<button class="back" data-sgadj="-1" style="margin:0;font-size:22px">−</button><button class="back" data-sgadj="1" style="margin:0;font-size:22px">＋</button>`:""}</div>`:""}
+    ${s.jd<30&&s.sg<segN(s)?`<div class="d" style="margin-top:6px">المقطع القادم (${ar(s.sg+1)}): <b style="color:var(--ink)">${segLabel(SEGDATA[s.jd][s.sg])}</b></div>`:""}
+    ${isH?`<div class="d" style="margin-top:8px">${lastS?"آخر رد منه: <b>"+esc(lastS.t)+"</b> · "+agoT(lastS.at):"لا توجد ردود منه في المحادثة بعد"}</div>
+    <div class="act"><button class="c" data-chat="${s.id}">💬 محادثة</button><button class="g" data-hearstart="${s.id}">تحديث مكان الوصول</button></div>`:""}
+    <div style="border-top:1px solid var(--line);margin:12px 0 8px"></div>
+    <div class="d" style="margin-bottom:4px">آخر المقاطع المسمّعة</div>
+    ${heardAll.length?heardAll.slice(0,state.lim.heard).map(heardRow).join(""):'<div class="d">لا يوجد تسميع بعد</div>'}${moreBtn("heard",heardAll.length)}</div>
+  <div class="card"><div style="font-weight:700;margin-bottom:6px">${isH?"سجل المراجعات (ما سجّله الطالب)":"سجل المراجعات"}</div>
+    ${hist.length?hist.slice(0,state.lim.rev).map(([d,rs])=>`<div class="hist"><div class="d">${dayLabel(d)}</div>${rs.map(revRow).join("")}</div>`).join(""):'<div class="d">لا توجد مراجعات</div>'}${moreBtn("rev",hist.length)}</div>
+  <div class="card"><div style="font-weight:700;margin-bottom:6px">سجل الربط</div>
+    ${rbAll.length?rbAll.slice(0,state.lim.ribt).map(r=>`<div class="hist"><div class="d">${dayLabel(r.dd)} · مع ${shName(r.by)}</div>${r.note?`<div>${esc(r.note)}</div>`:`<div class="d">بدون ملاحظات</div>`}</div>`).join(""):'<div class="d">لا يوجد ربط بعد</div>'}${moreBtn("ribt",rbAll.length)}</div>`;
+}
+function sheikhStudent(){return profileView(STUDENTS.find(x=>x.id===state.open),"h")}
+
+function sheikhHome(){
+  return state.tab==="ready"?readyView():state.tab==="requests"?requestsView():state.tab==="sardreq"?sardReqView():state.tab==="ribt"?ribtMgrView():state.tab==="students"?studentsView():state.tab==="plans"?plansView():state.tab==="chats"?chatsList():sheikhList();
+}
+const PLANS={1:{juz:2,surah:3,note:"المراجعة بعد صلاة الفجر",at:3},6:{juz:0,surah:3,note:"",at:5}};
+const cnt=(n,one,two,few,many)=>n===1?one:n===2?two:n<=10?ar(n)+" "+few:ar(n)+" "+many;
+const planSum=p=>[p.juz>0?cnt(p.juz,"جزء واحد","جزءان","أجزاء","جزءاً"):"",p.surah>0?cnt(p.surah,"سورة واحدة","سورتان","سور","سورة"):""].filter(Boolean).join(" و")+" في اليوم";
+function studentPlan(){
+  const p=PLANS[state.me];
+  return `<h1>خطتي</h1>`+(p?`<div class="card"><div class="d">المطلوب منك يومياً</div><div style="font-size:21px;font-weight:800">${planSum(p)}</div>
+    ${p.note?`<div class="note info" style="margin-top:12px"><b>ملاحظة الشيخ:</b> ${esc(p.note)}</div>`:""}
+    <div class="d" style="margin-top:12px">آخر تحديث: ${dayLabel(p.at)}</div></div>`:`<div class="card d" style="text-align:center">لم يحدد ${MAJOR} خطتك بعد</div>`);
+}
+function plansView(){
+  if(state.pe!=null){
+    const s=stu(state.pe),d=state.pd;
+    const stp=(k,l,u)=>`<label>${l}</label><div style="display:flex;align-items:center;gap:14px"><button class="back" data-pstep="${k}" data-pdelta="-1" style="margin:0;font-size:26px">−</button><b style="font-size:22px;min-width:30px;text-align:center">${ar(d[k])}</b><button class="back" data-pstep="${k}" data-pdelta="1" style="margin:0;font-size:26px">＋</button><span class="d">${u}</span></div>`;
+    return `<button class="back" data-pback="1">→ رجوع للقائمة</button><h1>خطة ${s.name}</h1>
+    <div class="card">${stp("juz","كم جزءاً يراجع في اليوم","جزء")}${stp("surah","كم سورة يراجع في اليوم","سورة")}
+      <div class="d" style="margin-top:10px">تقدر تجمع بين الاثنين، مثل جزأين مع ٣ سور. اترك أحدهما صفراً إذا ما تبيه.</div>
+      <label>ملاحظة للطالب (اختياري)</label><textarea id="pnote" rows="2" placeholder="مثال: المراجعة بعد صلاة الفجر">${esc(d.note||"")}</textarea>
+      ${d.err?`<div class="err">${d.err}</div>`:""}
+      <button class="btn" id="psave">حفظ الخطة</button></div>`;
+  }
+  const row=x=>{const p=PLANS[x.id];return `<button class="st ${p?"":"miss"}" data-plan="${x.id}" data-name="${x.name}"><span class="no">${ar(x.id)}</span><span><div class="nm">${x.name}</div><div class="what">${p?planSum(p):"لم تُحدد الخطة"}</div></span><span class="arr">‹</span></button>`};
+  const has=STUDENTS.filter(x=>PLANS[x.id]),no=STUDENTS.filter(x=>!PLANS[x.id]);
+  return `<h1>خطط الطلاب</h1><input id="q" type="search" placeholder="ابحث باسم الطالب…" style="margin-bottom:12px">`
+    +(has.length?`<div class="d" style="margin:4px 2px 8px">لهم خطة (${ar(has.length)})</div>`+has.map(row).join(""):"")
+    +(no.length?`<div class="d" style="margin:14px 2px 8px">بدون خطة (${ar(no.length)})</div>`+no.map(row).join(""):"");
+}
+function studentsView(){
+  const rows=STUDENTS.map(x=>{const li=[...Array(30).keys()].find(d=>of(x.id,d).length);
+    return `<button class="st" data-open="${x.id}" data-name="${x.name}"><span class="no">${ar(x.id)}</span><span><div class="nm">${x.name}</div><div class="d">${ar(x.jd)} جزءاً محفوظاً · آخر مراجعة: ${li===undefined?"—":dayLabel(li)}</div></span><span class="arr">‹</span></button>`}).join("");
+  return `<h1>الطلاب</h1><input id="q" type="search" placeholder="ابحث باسم الطالب…" style="margin-bottom:12px">`+rows;
+}
+function readyView(){
+  return `<h1>الجاهزون للتسميع</h1>`+(READY.length?READY.map((r,i)=>{const s=STUDENTS.find(x=>x.id===r.sid);
+    return `<div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no">${ar(s.id)}</span><div><div style="font-weight:700">${s.name}</div><div class="d">جاهز ${ago(r.at)}${r.miss?" · لم يرد "+(r.miss===1?"مرة":r.miss===2?"مرتين":ar(r.miss)+" مرات"):""}</div></div><span class="badge b-g" style="margin-inline-start:auto">الدور ${ar(i+1)}</span></div>
+    <div style="margin-top:10px;background:var(--green2);color:var(--green);border-radius:10px;padding:8px 12px;font-weight:700">المقطع: ${rangeTitle(r)}</div>
+    <div class="d" style="margin-top:8px">رقم الجوال: <bdi>${s.phone}</bdi></div>
+    ${ntSelect("rt-"+s.id,"")}
+    <textarea id="rn-${s.id}" rows="2" placeholder="اكتب الملاحظة (اختياري)" style="margin-top:8px"></textarea>
+    <label style="display:flex;gap:8px;align-items:center;margin:10px 0 0;font-size:15px;color:var(--ink)"><input type="checkbox" id="rp-${s.id}" checked style="width:auto"> تحديث مكان وصول حفظه</label>
+    <label style="display:flex;gap:8px;align-items:center;margin:8px 0 0;font-size:15px;color:var(--ink)"><input type="checkbox" id="rq-${s.id}" style="width:auto"> يُكمل به مقطعاً من الجزء الحالي</label>
+    <div class="act"><a class="c" href="tel:${s.phone}">📞 اتصال</a><button class="g" data-noans="${s.id}">ما رد</button><button class="g" data-done="${s.id}">تم التسميع</button></div>
+    <button class="back" data-open="${s.id}" style="margin:8px 0 0;font-size:14px">عرض ملف الطالب</button></div>`}).join(""):`<div class="card d" style="text-align:center">لا أحد جاهز الآن</div>`);
+}
+function hearView(){
+  const hr=state.hear, s=STUDENTS.find(x=>x.id===hr.sid);
+  const sl=SURAHS.map((x,i)=>`<option value="${i+1}" ${i+1==hr.ps?"selected":""}>${ar(i+1)}. ${x}</option>`).join("");
+  return `<button class="back" data-hcancel="1">→ إلغاء</button><h1>مكان وصول ${s.name}</h1>
+  <div class="card"><label>وصل حفظه إلى</label>
+    <div class="row2"><div><select id="hps">${sl}</select></div><div><input id="hpa" type="number" min="1" max="${AY[hr.ps-1]}" value="${hr.pa}" inputmode="numeric" aria-label="رقم الآية"></div></div>
+    <div class="d" style="margin-top:4px">السورة، ثم رقم الآية (من ${ar(AY[hr.ps-1])})</div>
+    <button class="btn" id="hsave">حفظ</button></div>`;
+}
+function syncRd(){
+  const g=id=>document.getElementById(id),rd=state.rd;
+  if(g("rfrom"))rd.from=+g("rfrom").value||0;
+  if(g("rto"))rd.to=+g("rto").value||0;
+}
+function syncHear(){
+  const hr=state.hear;if(!hr)return;
+  const g=id=>document.getElementById(id);
+  if(g("hfrom"))hr.from=+g("hfrom").value;
+  if(g("hto"))hr.to=+g("hto").value;
+  if(g("hps"))hr.ps=+g("hps").value;
+  if(g("hpa"))hr.pa=+g("hpa").value||1;
+}
+
+function tracker(r){
+  const p={new:1,sard:1,sard_done:2,exam:2,exam_done:3,approved:4,rejected:4}[r.stage];
+  const steps=["إرسال الطلب","السرد","الاختبار","الاعتماد"];
+  return `<div class="card"><div style="font-weight:700;margin-bottom:6px">طلبي: ${juzName(r.juz)}</div>`+
+   steps.map((t,i)=>{const c=r.stage==="rejected"&&i===3?"rej":i<p?"done":i===p?"cur":"todo";return `<div class="stp ${c}"><span class="dot">${c==="done"?"✓":c==="rej"?"✗":ar(i+1)}</span><span>${t}</span></div>`}).join("")+
+   `<div class="d" style="margin-top:8px">${stageText(r)}</div></div>`;
+}
+function resultCard(r){
+  const ok=r.stage==="approved",c=ok?"var(--green)":"var(--red)";
+  return `<div class="card" style="border:2px solid ${c}"><div style="font-weight:800;font-size:18px;color:${c}">${ok?"🎉 مبارك! اُعتمد نجاحك في "+juzName(r.juz):"لم يُعتمد النجاح في "+juzName(r.juz)}</div>
+  <div style="margin-top:8px">درجة الاختبار: <b>${ar(r.exam.grade)}</b> من ${ar(100)}</div>
+  ${sardNote(r)}
+  ${r.exam.note?`<div class="note info"><b>ملاحظات الاختبار:</b> ${esc(r.exam.note)}</div>`:""}
+  ${r.res&&r.res.note?`<div class="note info"><b>ملاحظة ${MAJOR}:</b> ${esc(r.res.note)}</div>`:""}</div>`;
+}
+function studentExam(){
+  const me=stu(state.me),done=me.jd>=30,act=activeReq(me.id),last=lastReq(me.id);
+  let h=`<h1>اختبار الجزء</h1><div class="card"><div class="d">الأجزاء المحفوظة</div><div style="font-size:20px;font-weight:800">${ar(me.jd)} من ${ar(30)}</div><div class="bar"><i style="width:${me.jd/30*100}%"></i></div>`;
+  if(!done)h+=`<div style="margin-top:12px"><b>${juzName(curJuz(me))}</b> <span class="d">(الجزء الحالي)</span></div><div class="d">مقاطع مكتملة: ${ar(me.sg)} من ${ar(segN(me))}</div><div class="bar"><i style="width:${me.sg/segN(me)*100}%"></i></div>`;
+  h+=`</div>`;
+  if(act){h+=tracker(act)+(sardNote(act)?`<div class="card" style="padding:4px 16px 14px">${sardNote(act)}</div>`:"")}
+  else{
+    if(last)h+=resultCard(last);
+    if(!done)h+=me.sg>=segN(me)
+      ?`<button class="btn" id="reqexam" style="margin-top:0">طلب السرد والاختبار</button>`
+      :`<button class="btn" disabled style="margin-top:0;opacity:.4">طلب السرد والاختبار</button><div class="d" style="margin-top:8px;text-align:center">يُفتح الزر بعد إكمال كل مقاطع الجزء</div>`;
+    else h+=`<div class="done">ما شاء الله، أتممت حفظ القرآن كاملاً</div>`;
+  }
+  return h;
+}
+function reqCard(r){
+  const x=stu(r.sid);
+  const sel=(role,id)=>`<label>${role==="sard"?"توجيه لشيخ السرد":"توجيه لشيخ الاختبار"}</label><select id="${id}">${SH.filter(y=>y.role===role).map(y=>`<option value="${y.id}" ${y.avail?"":"disabled"}>${y.name}${y.avail?"":" (غير متاح)"}</option>`).join("")}</select><button class="btn" data-assign="${r.id}" style="margin-top:12px;min-height:48px;font-size:16px">توجيه</button>`;
+  let body="";
+  if(r.stage==="new")body=sel("sard","as-"+r.id);
+  else if(r.stage==="sard_done")body=sardNote(r)+sel("exam","as-"+r.id);
+  else if(r.stage==="exam_done")body=sardNote(r)+`<div class="note info"><b>نتيجة الاختبار (${shName(r.exam.by)}):</b> ${ar(r.exam.grade)} من ${ar(100)}${r.exam.note?" — "+esc(r.exam.note):""}</div><textarea id="mn-${r.id}" rows="2" placeholder="ملاحظتك للطالب (اختياري)" style="margin-top:10px"></textarea><div class="act"><button class="c" data-approve="${r.id}">اعتماد النجاح</button><button class="g" style="color:var(--red)" data-reject="${r.id}">عدم الاعتماد</button></div>`;
+  else if(r.stage==="sard"||r.stage==="exam")body=`<div class="d">${stageText(r)}</div><button class="back" data-unassign="${r.id}" style="font-size:14px;margin:6px 0 0">↩ إعادة التوجيه</button>`;
+  const [bt,bc]=BADGE[r.stage];
+  return `<div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no">${ar(x.id)}</span><div><div style="font-weight:700">${x.name}</div><div class="d">${juzName(r.juz)}${r.exam&&r.stage!=="exam"?" · الدرجة "+ar(r.exam.grade):""}</div></div><span class="badge ${bc}" style="margin-inline-start:auto">${bt}</span></div>${body}</div>`;
+}
+function availCard(role){
+  const t={sard:"مشايخ السرد",exam:"مشايخ الاختبار",ribt:"مشايخ الربط"}[role];
+  return `<div class="card"><div style="font-weight:700;margin-bottom:6px">${t}</div>${SH.filter(y=>y.role===role).map(y=>`<div class="hist" style="display:flex;justify-content:space-between"><span>${y.name}</span><span class="badge ${y.avail?"b-g":"b-n"}">${y.avail?"متاح":"غير متاح"}</span></div>`).join("")}</div>`;
+}
+function reqPage(title,needS,goS,withFin,role){
+  const need=REQS.filter(r=>needS.includes(r.stage)),go=REQS.filter(r=>goS.includes(r.stage));
+  const fin=withFin?REQS.filter(r=>["approved","rejected"].includes(r.stage)).slice(-5).reverse():[];
+  const sec=(t,a)=>a.length?`<div class="d" style="margin:14px 2px 8px">${t} (${ar(a.length)})</div>`+a.map(reqCard).join(""):"";
+  const empty=!need.length&&!go.length&&!fin.length;
+  return `<h1>${title}</h1>`+(empty?`<div class="card d" style="text-align:center">لا توجد طلبات الآن</div>`:sec("تحتاج إجراءك",need)+sec("قيد التنفيذ",go)+sec("آخر النتائج",fin))+availCard(role);
+}
+function requestsView(){return reqPage("طلبات الاختبار",["exam_done"],[],true,"exam")}
+function sardReqView(){return reqPage("طلبات السرد",["new","sard_done"],["sard","exam"],false,"sard")}
+function ribtMgrView(){
+  const w=state.wk,x0=TD+7*w,endAgo=w===0?0:x0-6;
+  const newR=RB.filter(r=>r.stage==="new"),go=RB.filter(r=>r.stage==="ribt");
+  const card=r=>{const x=stu(r.sid);
+    const sel=`<label>توجيه لشيخ الربط</label><select id="ra-${r.id}">${SH.filter(y=>y.role==="ribt").map(y=>`<option value="${y.id}" ${y.avail?"":"disabled"}>${y.name}${y.avail?"":" (غير متاح)"}</option>`).join("")}</select><button class="btn" data-rassign="${r.id}" style="margin-top:12px;min-height:48px;font-size:16px">توجيه</button>`;
+    return `<div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no">${ar(x.id)}</span><div><div style="font-weight:700">${x.name}</div><div class="d">${juzName(r.juz)} · ${ar(r.segs)} من ${ar(segOfJuz(r.juz))} مقاطع</div></div><span class="badge ${r.stage==="new"?"b-r":"b-a"}" style="margin-inline-start:auto">${r.stage==="new"?"جديد":"قيد التنفيذ"}</span></div>${r.stage==="new"?sel:`<div class="d" style="margin-top:8px">عند ${shName(r.by)}</div><button class="back" data-runassign="${r.id}" style="font-size:14px;margin:6px 0 0">↩ إعادة التوجيه</button>`}</div>`};
+  const stt=x=>{const d=RB.find(r=>r.sid===x.id&&r.stage==="done"&&wkOf(r.dd)===w);if(d)return{k:"done",r:d};const p=RB.find(r=>r.sid===x.id&&r.stage==="ribt"&&wkOf(r.d)===w);if(p)return{k:"pend",r:p};const q=RB.find(r=>r.sid===x.id&&r.stage==="new"&&wkOf(r.d)===w);return q?{k:"none",wait:1}:{k:"none"}};
+  const rows=STUDENTS.map(x=>({x,s:stt(x)}));
+  const row=o=>`<button class="st ${o.s.k==="none"?"miss":o.s.k==="pend"?"pend":""}" data-open="${o.x.id}"><span class="no">${ar(o.x.id)}</span><span><div class="nm">${o.x.name}</div><div class="what">${o.s.k==="done"?"ربط مع "+shName(o.s.r.by)+" · "+dayLabel(o.s.r.dd):o.s.wait?"ينتظر توجيهك":"لم يربط"}</div></span><span class="arr">‹</span></button>`;
+  const grp=(k,t)=>{const a=rows.filter(o=>o.s.k===k);return a.length?`<div class="d" style="margin:14px 2px 8px">${t} (${ar(a.length)})</div>`+a.map(k==="pend"?(o=>card(o.s.r)):row).join(""):""};
+  const dn=rows.filter(o=>o.s.k==="done").length;
+  const sec=(t,a)=>a.length?`<div class="d" style="margin:14px 2px 8px">${t} (${ar(a.length)})</div>`+a.map(card).join(""):"";
+  return `<h1>الربط الأسبوعي</h1>${sec("طلبات تحتاج توجيهك",newR)}
+  <div class="nav" style="margin-top:18px"><button data-wk="1" ${w>=8?"disabled":""} aria-label="الأسبوع السابق">›</button><div class="t">${w===0?"هذا الأسبوع":w===1?"الأسبوع الماضي":"قبل "+ar(w)+" أسابيع"}<div class="d">${gregShort(x0)} – ${w===0?"اليوم":gregShort(endAgo)}</div></div><button data-wk="-1" ${w===0?"disabled":""} aria-label="الأسبوع التالي">‹</button></div>
+  <div class="card" style="padding:12px 16px"><b>ربط ${ar(dn)} من ${ar(STUDENTS.length)}</b><div class="bar"><i style="width:${dn/STUDENTS.length*100}%"></i></div></div>
+  ${grp("done","ربطوا")}${grp("pend","قيد التنفيذ")}${grp("none","لم يربطوا")}${availCard("ribt")}`;
+}
+function ribtTracker(r){
+  const p={new:1,ribt:1,done:3}[r.stage],steps=["إرسال الطلب","عند شيخ الربط","تم الربط"];
+  return `<div class="card"><div style="font-weight:700;margin-bottom:6px">طلب الربط</div>`+steps.map((t,i)=>{const c=i<p?"done":i===p?"cur":"todo";return `<div class="stp ${c}"><span class="dot">${c==="done"?"✓":ar(i+1)}</span><span>${t}</span></div>`}).join("")+`<div class="d" style="margin-top:8px">${r.stage==="new"?"بانتظار توجيه "+MAJOR+" لشيخ الربط":"عند "+shName(r.by)}</div></div>`;
+}
+function studentRibt(){
+  const me=stu(state.me),act=RB.find(r=>r.sid===me.id&&r.stage!=="done"),doneW=RB.find(r=>r.sid===me.id&&r.stage==="done"&&wkOf(r.dd)===0);
+  const hist=RB.filter(r=>r.sid===me.id&&r.stage==="done").sort((a,b)=>a.dd-b.dd).slice(0,6);
+  let h=`<h1>الربط الأسبوعي</h1><div class="card"><div class="d">الجزء الحالي</div><div style="font-size:19px;font-weight:800">${me.jd<30?juzName(curJuz(me)):"—"}</div><div style="margin-top:6px">مقاطع محفوظة: <b>${ar(me.sg)} من ${ar(segN(me))}</b></div><div class="d" style="margin-top:8px">في الربط تسمّع لشيخ الربط كل المقاطع التي حفظتها في الجزء الحالي، مرة كل أسبوع.</div></div>`;
+  if(act)h+=ribtTracker(act);
+  else if(doneW)h+=`<div class="done">✓ تم ربطك هذا الأسبوع مع ${shName(doneW.by)}</div>`+(doneW.note?`<div class="card" style="padding:4px 16px 14px"><div class="note info"><b>ملاحظات الربط:</b> ${esc(doneW.note)}</div></div>`:"");
+  else h+=me.sg>=1
+    ?`<button class="btn" id="reqribt" style="margin-top:0">طلب الربط الأسبوعي</button>`
+    :`<button class="btn" disabled style="margin-top:0;opacity:.4">طلب الربط الأسبوعي</button><div class="d" style="margin-top:8px;text-align:center">لا توجد مقاطع محفوظة بعد في الجزء الحالي</div>`;
+  if(hist.length)h+=`<div class="card"><div style="font-weight:700;margin-bottom:6px">آخر مرات الربط</div>${hist.map(r=>`<div class="hist"><div class="d">${dayLabel(r.dd)} · ${shName(r.by)}</div>${r.note?`<div>${esc(r.note)}</div>`:`<div class="d">بدون ملاحظات</div>`}</div>`).join("")}</div>`;
+  return h;
+}
+function ribtRoleView(){
+  const me=SH.find(y=>y.id==="r1");
+  const mine=RB.filter(r=>r.stage==="ribt"&&r.by===me.id);
+  const past=RB.filter(r=>r.stage==="done"&&r.by===me.id).sort((a,b)=>a.dd-b.dd).slice(0,30);
+  if(state.rp==="done")return `<h1>ما أنجزته</h1><div class="card">${past.length?past.map(r=>`<div class="hist"><div>${stu(r.sid).name} · ${juzName(r.juz)}</div><div class="d">${dayLabel(r.dd)}</div></div>`).join(""):'<div class="d">لا يوجد شيء بعد</div>'}</div>`;
+  const card=r=>{const x=stu(r.sid);return `<div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no">${ar(x.id)}</span><div><div style="font-weight:700">${x.name}</div><div class="d">${juzName(r.juz)} · ${ar(r.segs)} من ${ar(segOfJuz(r.juz))} مقاطع</div></div></div>
+    <div class="d" style="margin-top:8px">رقم الجوال: <bdi>${x.phone}</bdi></div>
+    <textarea id="rbn-${r.id}" rows="3" placeholder="ملاحظات على الربط" style="margin-top:10px"></textarea>
+    <div class="act"><a class="c" href="tel:${x.phone}">📞 اتصال</a><button class="g" data-ribtdone="${r.id}">تم الربط</button></div></div>`};
+  return `<h1>طلباتي</h1>
+  <div class="card"><div style="font-weight:700;margin-bottom:8px">حالتي</div><div class="seg2"><button data-avail="1" class="${me.avail?"on":""}">متاح</button><button data-avail="0" class="${me.avail?"":"on"}">غير متاح</button></div><div class="d" style="margin-top:6px">${MAJOR} يوجّه الطلاب للمتاحين فقط</div></div>
+  <div class="d" style="margin:14px 2px 8px">طلبات موجّهة لي (${ar(mine.length)})</div>
+  ${mine.length?mine.map(card).join(""):'<div class="card d" style="text-align:center">لا توجد طلبات الآن</div>'}`;
+}
+function roleView(role){
+  const me=SH.find(y=>y.id===(role==="sard"?"s1":"e1"));
+  const mine=REQS.filter(r=>r.stage===role&&r[role]&&r[role].by===me.id);
+  const past=REQS.filter(r=>r[role]&&r[role].by===me.id&&r[role].at).sort((a,b)=>b[role].at-a[role].at).slice(0,30);
+  const card=r=>{const x=stu(r.sid);return `<div class="card"><div style="display:flex;align-items:center;gap:12px"><span class="no">${ar(x.id)}</span><div><div style="font-weight:700">${x.name}</div><div class="d">${juzName(r.juz)}</div></div></div>
+    <div class="d" style="margin-top:8px">رقم الجوال: <bdi>${x.phone}</bdi></div>
+    ${role==="exam"?`<label>الدرجة (من ${ar(100)})</label><input id="eg-${r.id}" type="number" min="0" max="100" inputmode="numeric">`:""}
+    <textarea id="${role==="sard"?"sn-":"en-"}${r.id}" rows="3" placeholder="${role==="sard"?"ملاحظات على السرد":"ملاحظات على الاختبار"}" style="margin-top:10px"></textarea>
+    <div class="act"><a class="c" href="tel:${x.phone}">📞 اتصال</a><button class="g" ${role==="sard"?`data-sarddone="${r.id}">تم السرد`:`data-examdone="${r.id}">إرسال النتيجة للمشرف`}</button></div></div>`};
+  if(state.rp==="done")return `<h1>ما أنجزته</h1><div class="card">${past.length?past.map(r=>`<div class="hist"><div>${stu(r.sid).name} · ${juzName(r.juz)}${role==="exam"?" · الدرجة "+ar(r.exam.grade):""}</div><div class="d">${dayLabel(Math.floor((Date.now()-r[role].at)/DAY))}</div></div>`).join(""):'<div class="d">لا يوجد شيء بعد</div>'}</div>`;
+  return `<h1>طلباتي</h1>
+  <div class="card"><div style="font-weight:700;margin-bottom:8px">حالتي</div><div class="seg2"><button data-avail="1" class="${me.avail?"on":""}">متاح</button><button data-avail="0" class="${me.avail?"":"on"}">غير متاح</button></div><div class="d" style="margin-top:6px">${MAJOR} يوجّه الطلاب للمتاحين فقط</div></div>
+  <div class="d" style="margin:14px 2px 8px">طلبات موجّهة لي (${ar(mine.length)})</div>
+  ${mine.length?mine.map(card).join(""):'<div class="card d" style="text-align:center">لا توجد طلبات الآن</div>'}`;
+}
+const getPage=()=>state.view==="student"?state.stab:state.view==="major"?state.tab:state.rp;
+const setPage=k=>{if(state.view==="student")state.stab=k;else if(state.view==="major")state.tab=k;else state.rp=k};
+function menuItems(){
+  const ms=REQS.filter(r=>["new","sard_done"].includes(r.stage)).length,me2=REQS.filter(r=>r.stage==="exam_done").length,mr=RB.filter(r=>r.stage==="new").length,n=READY.length;
+  if(state.view==="student")return [["home","🏠","الرئيسية"],["me","👤","ملفي"],["plan","🗓️","خطتي"],["notes","💬","ملاحظات الشيخ"],["chats","✉️","المحادثات",unreadCount()],["history","📖","سجل المراجعات"],["ribt","🔁","الربط الأسبوعي"],["exam","🎓","اختبار الجزء"]];
+  if(state.view==="major")return [["daily","📋","المراجعة اليومية",(openDay()>0&&!APD.has(openDay()))?1:0],["ready","🟢","الجاهزون",n],["sardreq","📖","طلبات السرد",ms],["requests","🎓","طلبات الاختبار",me2],["ribt","🔁","الربط الأسبوعي",mr],["students","👥","الطلاب"],["plans","📝","خطط الطلاب"],["chats","✉️","المحادثات",unreadCount()]];
+  const myN=state.view==="ribt"?RB.filter(r=>r.stage==="ribt"&&r.by==="r1").length:REQS.filter(r=>r.stage===state.view&&r[state.view]&&r[state.view].by===(state.view==="sard"?"s1":"e1")).length;
+  return [["home","🏠","طلباتي",myN],["done","✅","ما أنجزته"],["chats","✉️","المحادثات",unreadCount()]];
+}
+function notifList(){
+  const v=state.view,L=[];
+  if(v==="student"){
+    NOTIF.filter(n=>n.sid===state.me).forEach(n=>L.push({k:n.kind==="plan"?"plan":"rej",n}));
+    const u=unreadCount();if(u)L.push({k:"go",ic:"✉️",t:`لديك ${ar(u)} رسالة جديدة`,go:"chats"});
+  }else if(v==="major"){
+    const op=openDay();if(op>0&&!APD.has(op))L.push({k:"go",ic:"📋",t:`قائمة ${dayLabel(op)} تنتظر اعتمادك`,go:"daily",day:op});
+    const n=READY.length,ms=REQS.filter(r=>["new","sard_done"].includes(r.stage)).length,me2=REQS.filter(r=>r.stage==="exam_done").length,mr=RB.filter(r=>r.stage==="new").length;
+    if(n)L.push({k:"go",ic:"🟢",t:`${ar(n)} طالب جاهز للتسميع`,go:"ready"});
+    if(ms)L.push({k:"go",ic:"📖",t:`${ar(ms)} طلب سرد يحتاج توجيهك`,go:"sardreq"});
+    if(me2)L.push({k:"go",ic:"🎓",t:`${ar(me2)} طلب اختبار بانتظار قرارك`,go:"requests"});
+    if(mr)L.push({k:"go",ic:"🔁",t:`${ar(mr)} طلب ربط أسبوعي جديد`,go:"ribt"});
+    const u=unreadCount();if(u)L.push({k:"go",ic:"✉️",t:`لديك ${ar(u)} رسالة جديدة`,go:"chats"});
+  }else{
+    const it=menuItems().find(x=>x[0]==="home");if(it&&it[3])L.push({k:"go",ic:"📌",t:`${ar(it[3])} طلب ينتظرك`,go:"home"});
+    const u=unreadCount();if(u)L.push({k:"go",ic:"✉️",t:`لديك ${ar(u)} رسالة جديدة`,go:"chats"});
+  }
+  return L;
+}
+function notifsView(){
+  const L=notifList();
+  const ic='<svg class="ntic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+  return `<h1>التنبيهات</h1>`+(L.length?L.map((n,i)=>n.k==="plan"?`<div class="nt">${ic}<div style="flex:1"><div style="font-weight:700">تم تحديث خطتك</div><div class="d" style="margin-top:4px">راجع «خطتي» لمعرفة المراجعة المطلوبة منك.</div><div class="act"><button class="c" data-pgo="${n.n.id}">عرض خطتي</button><button class="g" data-ndis="${n.n.id}">حسناً</button></div></div></div>`:n.k==="rej"
+    ?`<div class="nt">${ic}<div style="flex:1"><div style="font-weight:700">تم رفض مراجعتك وحذفها</div><div style="margin-top:4px">${n.n.t} · ${dayLabel(n.n.d)}</div>${n.n.rn?`<div class="d" style="margin-top:4px">السبب: ${esc(n.n.rn)}</div>`:""}<div class="d" style="margin-top:4px">سجّلها من جديد في الرئيسية.</div><button class="btn ghost" data-ndis="${n.n.id}" style="margin-top:10px;min-height:44px">حسناً</button></div></div>`
+    :`<button class="nt" data-ngo="${i}">${ic}<div style="flex:1;font-weight:700">${n.t}</div><span class="arr">‹</span></button>`).join("")
+    :`<div class="nt" style="justify-content:center;color:var(--mute)">لا توجد تنبيهات جديدة</div>`);
+}
+function menu(on){const d=document.getElementById("drawer"),c=document.getElementById("scrim");if(d)d.classList.toggle("on",on);if(c)c.classList.toggle("on",on)}
+function chrome(){
+  const v=state.view,g=id=>document.getElementById(id);
+  const names={student:stu(state.me).name,major:MAJOR,sard:shName("s1"),exam:shName("e1"),ribt:shName("r1")},labels={student:"طالب",major:"المشرف",sard:"شيخ السرد",exam:"شيخ الاختبار",ribt:"شيخ الربط"};
+  const items=menuItems(),cur=getPage(),pend=items.reduce((a,x)=>a+(x[3]||0),0);
+  if(g("hname"))g("hname").textContent=names[v];
+  if(g("bell")){const nc=notifList().length;g("bell").innerHTML='<svg width="26" height="26" viewBox="0 0 24 24" fill="#1f6b4f" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>'+(nc?`<span class="bellb">${ar(nc)}</span>`:"")}
+  if(g("menubtn"))g("menubtn").innerHTML="☰"+(pend?'<i class="dotb"></i>':"");
+  if(g("drawer"))g("drawer").innerHTML=`<div class="dh"><div style="font-weight:800;font-size:19px">${names[v]}</div><div class="s">${labels[v]}</div></div>`
+    +items.map(x=>`<button class="mi ${cur===x[0]?"on":""}" data-nav="${x[0]}"><span>${x[1]}</span><span>${x[2]}</span>${x[3]?`<span class="bd">${ar(x[3])}</span>`:""}</button>`).join("")
+    +`<div class="msep"></div><button class="mi" data-logout="1"><span>🚪</span><span>تسجيل الخروج</span></button>
+    <div class="dbox">للتجربة فقط: بدّل الدور لتشوف كل الشاشات<select id="who"><option value="student" ${v==="student"?"selected":""}>الطالب (محمد)</option><option value="major" ${v==="major"?"selected":""}>المشرف (الشيخ بندر)</option><option value="sard" ${v==="sard"?"selected":""}>شيخ السرد (الشيخ عاصم)</option><option value="exam" ${v==="exam"?"selected":""}>شيخ الاختبار (الشيخ ياسين)</option><option value="ribt" ${v==="ribt"?"selected":""}>شيخ الربط (الشيخ محمد)</option></select></div>`;
+}
+function dayShell(){
+  const s=stu(state.dsheet),rs=of(s.id,state.day);
+  return `<div class="sheetbg" data-sheetclose="1"></div><div class="sheet"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div><div style="font-size:19px;font-weight:800">${s.name}</div><div class="d">${dayLabel(state.day)}</div></div><button class="back" data-sheetclose="1" style="margin:0;font-size:26px" aria-label="إغلاق">×</button></div>
+  <div class="card" style="padding:4px 14px">${rs.length?rs.map(r=>`<div class="hist"><div>${rangeTitle(r)}</div>${state.rejId===r.id?`<textarea id="rj-${r.id}" rows="2" style="margin-top:8px" placeholder="سبب الرفض (اختياري). الرفض يحذف المراجعة ويصل السبب للطالب"></textarea><div class="act"><button class="c" style="background:var(--red)" data-rrejgo="${r.id}">رفض وحذف</button><button class="g" data-rrejno="1">إلغاء</button></div>`:`<button class="back" data-rrej="${r.id}" style="font-size:15px;margin:6px 0 0;color:var(--red)">✗ رفض الطلب</button>`}</div>`).join(""):'<div class="d" style="padding:10px 0">لم يسجّل مراجعة في هذا اليوم</div>'}</div>
+  <button class="back" data-open="${s.id}" style="margin:12px 0 0;font-size:14px;color:var(--green)">عرض الملف التعريفي ‹</button></div>`;
+}
+function render(keep){
+  $("#view").innerHTML=state.notifs?notifsView():state.conv!=null?chatView(state.conv):state.newchat?pickerView():state.view==="student"?studentView():state.view==="sard"||state.view==="exam"?(state.rp==="chats"?chatsList():roleView(state.view)):state.view==="ribt"?(state.rp==="chats"?chatsList():ribtRoleView()):state.hear?hearView():state.open?sheikhStudent():sheikhHome();
+  if(state.sheet&&state.editId&&state.view==="student")$("#view").innerHTML+=`<div class="sheetbg" data-sheetclose="1"></div><div class="sheet">${reviewForm()}</div>`;
+  if(state.dsheet&&state.view==="major"&&!state.open&&state.tab==="daily")$("#view").innerHTML+=dayShell();
+  chrome();
+  if(!keep&&!state.sheet&&!state.dsheet)window.scrollTo(0,0);
+}
+
+function listText(){
+  return "قائمة المراجعة - "+dayFull(state.day)+" - "+hijri(state.day)+"\n"+STUDENTS.map(s=>{const rs=okOf(s.id,state.day);return ar(s.id)+"- "+s.name+(rs.length?": "+names(rs):"")}).join("\n");
+}
+
+document.addEventListener("click",e=>{
+  if(e.target.closest("#menubtn")){menu(true);return}
+  if(e.target.closest("#bell")){state.dsheet=null;state.notifs=!state.notifs;state.conv=null;state.newchat=false;state.open=null;state.hear=null;render();return}
+  const ng=e.target.closest("[data-ngo]");
+  if(ng){const n=notifList()[+ng.dataset.ngo];if(n){state.notifs=false;setPage(n.go);if(n.day!==undefined)state.day=n.day;state.open=null;state.hear=null;state.conv=null;state.newchat=false;render()}return}
+  if(e.target.id==="scrim"){menu(false);return}
+  const nv=e.target.closest("[data-nav]");
+  if(nv){state.pe=null;state.dsheet=null;state.notifs=false;state.sheet=false;state.editId=null;setPage(nv.dataset.nav);state.lim={heard:3,rev:3,ribt:3};state.open=null;state.hear=null;state.conv=null;state.newchat=false;state.err="";menu(false);render();return}
+  if(e.target.closest("[data-logout]")){menu(false);toast("في النسخة الحقيقية: تسجيل الخروج");return}
+  const tab=e.target.closest("#tabs button");
+  if(tab){state.notifs=false;state.view=tab.dataset.v;state.open=null;state.hear=null;state.err="";render();return}
+  const seg=e.target.closest(".seg button");
+  if(seg&&seg.dataset.pm===undefined){const k=seg.parentElement.dataset.seg,v=seg.dataset.val,d=state.draft;
+    if(k==="mode"){d.mode=v;d.from=d.to=v==="juz"?30:114}
+    else{d.multi=v==="1";if(!d.multi)d.to=d.from}
+    state.err="";render();return}
+  if(e.target.id==="add"){
+    const d=state.draft;
+    if(d.multi&&(d.mode==="juz"?d.to>d.from:d.to<d.from)){state.err=d.mode==="juz"?"اختر «إلى» بعد «من» في القائمة، مثل: من جزء عم إلى جزء تبارك.":"اختر «إلى» بعد «من» في القائمة، مثل: من النبأ إلى النازعات.";render();return}
+    const to=d.multi?d.to:d.from;
+    if(state.editId){const r=REVIEWS.find(x=>x.id===state.editId);if(r){r.mode=d.mode;r.from=d.from;r.to=to;r.st="pend";r.rn=""}state.editId=null;state.sheet=false;state.err="";render(true);toast("تم التعديل ✓");return}
+    state.err="";REVIEWS.push({id:++rid,sid:state.me,d:0,mode:d.mode,from:d.from,to,st:"pend"});APD.delete(0);
+    render();toast("تم التسجيل ✓");return}
+  if(e.target.id==="ready"){const me=stu(state.me);if(me.jd>=30)return;const el=document.getElementById("rseg"),P=SEGDATA[me.jd],si=el?+el.value:Math.min(me.sg,P.length-1);
+    state.rd.err="";READY.push({sid:state.me,at:Date.now(),mode:"seg",g:P[si]});render();toast("تم إبلاغ الشيخ ✓");return}
+  const na=e.target.closest("[data-noans]");
+  if(na){const i=READY.findIndex(x=>x.sid===+na.dataset.noans);
+    if(i>=0){const r=READY.splice(i,1)[0];r.miss=(r.miss||0)+1;READY.push(r)}
+    render(true);toast("نُقل لآخر الدور");return}
+  const dn2=e.target.closest("[data-done]");
+  if(dn2){const sid=+dn2.dataset.done,i=READY.findIndex(x=>x.sid===sid);
+    if(i>=0){const r=READY[i],ta=document.getElementById("rn-"+sid),sel=document.getElementById("rt-"+sid);
+      const t=ta?ta.value.trim():"",nt=sel?sel.value:"";
+      if(t&&!nt){toast("اختر نوع الملاحظة: إشادة أو تنبيه");return}
+      HEARD.push(r.mode==="seg"?{id:++rid,sid,d:0,mode:"seg",g:r.g,note:nt?t:"",nt:t&&nt?nt:""}:{id:++rid,sid,d:0,mode:"ayah",surah:r.surah,from:r.from,to:r.to,note:nt?t:"",nt:t&&nt?nt:""});
+      const cp=document.getElementById("rp-"+sid),upd=!cp||cp.checked;
+      const cq=document.getElementById("rq-"+sid);if(cq&&cq.checked){const st=stu(sid);st.sg=Math.min(segN(st),st.sg+1)}
+      if(upd){STUDENTS.find(x=>x.id===sid).p=r.mode==="seg"?{s:r.g[2],a:r.g[3]}:{s:r.surah,a:r.to}}
+      READY.splice(i,1);render(true);toast(upd?"تم التسجيل وتحديث مكان الوصول ✓":"تم تسجيل التسميع ✓");return}
+    render(true);return}
+  if(e.target.id==="unready"){const i=READY.findIndex(x=>x.sid===state.me);if(i>=0)READY.splice(i,1);render();return}
+  const st=e.target.closest("[data-tab]");
+  if(st){state.tab=st.dataset.tab;render();return}
+  const hs=e.target.closest("[data-hearstart]");
+  if(hs){const s=STUDENTS.find(x=>x.id===+hs.dataset.hearstart);
+    state.hear={sid:s.id,ps:s.p.s,pa:s.p.a};state.herr="";render();return}
+  if(e.target.closest("[data-hcancel]")){state.hear=null;state.herr="";render();return}
+  const hg=e.target.closest(".seg2 button");
+  if(hg&&state.hear){syncHear();const hr=state.hear,k=hg.parentElement.dataset.hseg,v=hg.dataset.val;
+    if(k==="mode"){hr.mode=v;hr.from=hr.to=v==="juz"?30:114}
+    else{hr.multi=v==="1";if(!hr.multi)hr.to=hr.from}
+    state.herr="";render();return}
+  if(e.target.id==="hsave"){
+    syncHear();const hr=state.hear,s=STUDENTS.find(x=>x.id===hr.sid);
+    s.p={s:hr.ps,a:Math.min(Math.max(1,hr.pa),AY[hr.ps-1])};
+    state.hear=null;render();toast("تم الحفظ ✓");return}
+  const ne=e.target.closest("[data-noteedit]");if(ne){state.noteEdit=+ne.dataset.noteedit;render(true);return}
+  if(e.target.closest("[data-notecancel]")){state.noteEdit=null;render(true);return}
+  const ns=e.target.closest("[data-notesave]");
+  if(ns){const id=+ns.dataset.notesave,r=HEARD.find(x=>x.id===id);
+    const t=document.getElementById("ne-"+id).value.trim(),nt=document.getElementById("nt-"+id).value;
+    if(t&&!nt){toast("اختر نوع الملاحظة: إشادة أو تنبيه");return}
+    r.note=nt?t:"";r.nt=t&&nt?nt:"";state.noteEdit=null;render(true);toast("تم حفظ الملاحظة ✓");return}
+  const sb=e.target.closest("[data-stab]");if(sb){state.stab=sb.dataset.stab;render();return}
+  const re=e.target.closest("[data-redit]");
+  if(re){const r=REVIEWS.find(x=>x.id===+re.dataset.redit);if(r){state.draft={mode:r.mode,multi:r.from!==r.to,from:r.from,to:r.to};state.editId=r.id;state.delId=null;state.err="";state.sheet=true;render(true)}return}
+  if(e.target.id==="canceledit"||e.target.closest("[data-sheetclose]")){state.editId=null;state.sheet=false;state.dsheet=null;state.rejId=null;state.err="";render(true);return}
+  const rd1=e.target.closest("[data-rdel]");if(rd1){state.delId=+rd1.dataset.rdel;render(true);return}
+  if(e.target.closest("[data-delno]")){state.delId=null;render(true);return}
+  const rd2=e.target.closest("[data-delyes]");
+  if(rd2){const id=+rd2.dataset.delyes,i=REVIEWS.findIndex(x=>x.id===id);if(i>=0)REVIEWS.splice(i,1);if(state.editId===id)state.editId=null;state.delId=null;render(true);toast("تم الحذف");return}
+  const hd1=e.target.closest("[data-hdel]");if(hd1){state.delHid=+hd1.dataset.hdel;render(true);return}
+  if(e.target.closest("[data-hdelno]")){state.delHid=null;render(true);return}
+  const hd2=e.target.closest("[data-hdelyes]");
+  if(hd2){const id=+hd2.dataset.hdelyes,i=HEARD.findIndex(x=>x.id===id);if(i>=0)HEARD.splice(i,1);state.delHid=null;render(true);toast("تم حذف التسميع");return}
+  if(e.target.id==="reqexam"){const me=stu(state.me);if(me.sg>=segN(me)&&!activeReq(me.id)&&me.jd<30){REQS.push({id:++reqId,sid:me.id,juz:curJuz(me),stage:"new",at:Date.now()});render();toast("تم إرسال طلبك ✓")}return}
+  const as=e.target.closest("[data-assign]");
+  if(as){const r=REQS.find(x=>x.id===+as.dataset.assign),sel=document.getElementById("as-"+r.id),v=sel&&sel.value;if(!v)return;
+    if(r.stage==="new"){r.stage="sard";r.sard={by:v}}else if(r.stage==="sard_done"){r.stage="exam";r.exam={by:v}}
+    render(true);toast("تم التوجيه إلى "+shName(v)+" ✓");return}
+  const un=e.target.closest("[data-unassign]");
+  if(un){const r=REQS.find(x=>x.id===+un.dataset.unassign);if(r.stage==="sard"){r.stage="new";delete r.sard}else if(r.stage==="exam"){r.stage="sard_done";delete r.exam}render(true);return}
+  const ap=e.target.closest("[data-approve],[data-reject]");
+  if(ap){const ok=ap.hasAttribute("data-approve"),id=+(ap.dataset.approve||ap.dataset.reject),r=REQS.find(x=>x.id===id),ta=document.getElementById("mn-"+id);
+    r.res={ok,note:ta?ta.value.trim():"",at:Date.now()};r.stage=ok?"approved":"rejected";
+    if(ok){const x=stu(r.sid);x.jd=Math.min(30,x.jd+1);x.sg=0;state.rd.si=undefined}
+    render(true);toast(ok?"تم الاعتماد وتحديث أجزاء الطالب ✓":"تم إرسال النتيجة للطالب");return}
+  const sd=e.target.closest("[data-sarddone]");
+  if(sd){const r=REQS.find(x=>x.id===+sd.dataset.sarddone),ta=document.getElementById("sn-"+r.id);r.sard.note=ta?ta.value.trim():"";r.sard.at=Date.now();r.stage="sard_done";render(true);toast("تم السرد وأُرسل للمشرف ✓");return}
+  const ed=e.target.closest("[data-examdone]");
+  if(ed){const r=REQS.find(x=>x.id===+ed.dataset.examdone),g=document.getElementById("eg-"+r.id),n=document.getElementById("en-"+r.id);
+    const gv=g&&g.value!==""?+g.value:NaN;if(!(gv>=0&&gv<=100)){toast("أدخل الدرجة من ٠ إلى ١٠٠");return}
+    r.exam.grade=gv;r.exam.note=n?n.value.trim():"";r.exam.at=Date.now();r.stage="exam_done";render(true);toast("أُرسلت النتيجة للمشرف ✓");return}
+  const av=e.target.closest("[data-avail]");
+  if(av){const me=SH.find(y=>y.id==={sard:"s1",exam:"e1",ribt:"r1"}[state.view]);me.avail=av.dataset.avail==="1";render(true);return}
+  const sj=e.target.closest("[data-sgadj]");
+  if(sj){const x=stu(state.open);x.sg=Math.max(0,Math.min(segN(x),x.sg+ +sj.dataset.sgadj));render(true);return}
+  if(e.target.id==="reqribt"){const me=stu(state.me);
+    if(me.sg>=1&&!RB.find(r=>r.sid===me.id&&r.stage!=="done")&&!RB.find(r=>r.sid===me.id&&r.stage==="done"&&wkOf(r.dd)===0)){RB.push({id:++rbId,sid:me.id,d:0,stage:"new",juz:curJuz(me),segs:me.sg});render();toast("تم إرسال طلب الربط ✓")}return}
+  const rA=e.target.closest("[data-rassign]");
+  if(rA){const r=RB.find(x=>x.id===+rA.dataset.rassign),sel=document.getElementById("ra-"+r.id),v=sel&&sel.value;if(!v)return;r.stage="ribt";r.by=v;render(true);toast("تم التوجيه إلى "+shName(v)+" ✓");return}
+  const rU=e.target.closest("[data-runassign]");
+  if(rU){const r=RB.find(x=>x.id===+rU.dataset.runassign);r.stage="new";delete r.by;render(true);return}
+  const rD=e.target.closest("[data-ribtdone]");
+  if(rD){const r=RB.find(x=>x.id===+rD.dataset.ribtdone),ta=document.getElementById("rbn-"+r.id);r.note=ta?ta.value.trim():"";r.stage="done";r.dd=0;render(true);toast("تم الربط وأُبلغ المشرف ✓");return}
+  const rW=e.target.closest("[data-wk]");
+  if(rW&&!rW.disabled){state.wk=Math.max(0,Math.min(8,state.wk+ +rW.dataset.wk));render(true);return}
+  const ch=e.target.closest("[data-chat]");if(ch){openConv(getConv(+ch.dataset.chat,"b").id);render();return}
+  if(e.target.closest("[data-cback]")){state.conv=null;render();return}
+  const oc=e.target.closest("[data-openconv]");if(oc){openConv(+oc.dataset.openconv);render();return}
+  if(e.target.closest("[data-newchat]")){state.newchat=true;render();return}
+  if(e.target.closest("[data-ncback]")){state.newchat=false;render();return}
+  const nc=e.target.closest("[data-newconv]");
+  if(nc){const [sid,hid]=nc.dataset.newconv.split(":");state.newchat=false;openConv(getConv(+sid,hid).id);render();return}
+  const qs=e.target.closest("[data-qsend]");if(qs){sendMsg(qs.dataset.qsend);return}
+  if(e.target.id==="csend"){const ta=document.getElementById("cmsg"),t=ta?ta.value.trim():"";if(t)sendMsg(t);return}
+  const mo=e.target.closest("[data-more]");if(mo){state.lim[mo.dataset.more]+=5;render(true);return}
+  const ls=e.target.closest("[data-less]");if(ls){state.lim[ls.dataset.less]=3;render(true);return}
+  const ok1=e.target.closest("[data-rok]");if(ok1){const r=REVIEWS.find(x=>x.id===+ok1.dataset.rok);if(r){r.st="ok";r.rn=""}render(true);toast("تم القبول ✓");return}
+  const rj1=e.target.closest("[data-rrej]");if(rj1){state.rejId=+rj1.dataset.rrej;render(true);return}
+  if(e.target.closest("[data-rrejno]")){state.rejId=null;render(true);return}
+  const rj2=e.target.closest("[data-rrejgo]");if(rj2){const id=+rj2.dataset.rrejgo,r=REVIEWS.find(x=>x.id===id),el=document.getElementById("rj-"+id);if(r){NOTIF.push({id:++nid,sid:r.sid,t:rangeTitle(r),d:r.d,rn:el?el.value.trim():""});const i=REVIEWS.indexOf(r);if(i>=0)REVIEWS.splice(i,1)}state.rejId=null;render(true);toast("تم الرفض وحُذفت المراجعة");return}
+  const pl=e.target.closest("[data-plan]");if(pl){const id=+pl.dataset.plan,pp=PLANS[id];state.pe=id;state.pd=pp?{juz:pp.juz,surah:pp.surah,note:pp.note||"",err:""}:{juz:1,surah:0,note:"",err:""};render();return}
+  if(e.target.closest("[data-pback]")){state.pe=null;render();return}
+  const ps=e.target.closest("[data-pstep]");if(ps){const d=state.pd,k=ps.dataset.pstep;d[k]=Math.max(0,Math.min(k==="juz"?30:20,d[k]+ +ps.dataset.pdelta));d.err="";render(true);return}
+  if(e.target.id==="psave"){const d=state.pd;
+    if(d.juz+d.surah<1){d.err="حدد جزءاً أو سورة على الأقل.";render(true);return}
+    const sid=state.pe;PLANS[sid]={juz:d.juz,surah:d.surah,note:d.note.trim(),at:0};
+    NOTIF.push({id:++nid,sid,kind:"plan"});state.pe=null;state.pd=null;render();toast("تم حفظ الخطة ✓");return}
+  const pg=e.target.closest("[data-pgo]");if(pg){const i=NOTIF.findIndex(x=>x.id===+pg.dataset.pgo);if(i>=0)NOTIF.splice(i,1);state.notifs=false;state.stab="plan";render();return}
+  const nd=e.target.closest("[data-ndis]");if(nd){const i=NOTIF.findIndex(x=>x.id===+nd.dataset.ndis);if(i>=0)NOTIF.splice(i,1);render(true);return}
+  if(e.target.id==="approve"){state.apc=true;render(true);return}
+  if(e.target.id==="apno"){state.apc=false;render(true);return}
+  if(e.target.id==="apyes"){const d=state.day;REVIEWS.forEach(r=>{if(r.d===d&&r.st!=="rej")r.st="ok"});APD.add(d);state.apc=false;state.day=openDay();render();toast("تم اعتماد القائمة ✓");return}
+  const dn=e.target.closest("[data-day]");
+  if(dn&&!dn.disabled){state.day=Math.max(openDay(),Math.min(29,state.day+ +dn.dataset.day));state.apc=false;state.dsheet=null;render();return}
+  const ds=e.target.closest("[data-dsheet]");if(ds){state.dsheet=+ds.dataset.dsheet;state.rejId=null;render(true);return}
+  const op=e.target.closest("[data-open]");
+  if(op){state.dsheet=null;state.rejId=null;state.open=+op.dataset.open;state.lim={heard:3,rev:3,ribt:3};state.conv=null;state.newchat=false;render();return}
+  if(e.target.closest("[data-back]")){state.open=null;render();return}
+  if(e.target.id==="copy"){
+    try{navigator.clipboard.writeText(listText()).then(()=>toast("تم النسخ ✓"),()=>toast("تعذّر النسخ"))}catch(_){toast("تعذّر النسخ")}
+  }
+});
+document.addEventListener("change",e=>{
+  const d=state.draft;
+  if(e.target.id==="from"){d.from=+e.target.value;if(!d.multi||(d.mode==="juz"?d.to>d.from:d.to<d.from))d.to=d.from;render()}
+  if(e.target.id==="to"){d.to=+e.target.value}
+  if(e.target.id==="who"){state.pe=null;state.dsheet=null;state.notifs=false;state.sheet=false;state.editId=null;state.view=e.target.value;state.stab="home";state.tab="daily";state.rp="home";state.wk=0;state.lim={heard:3,rev:3,ribt:3};state.open=null;state.conv=null;state.newchat=false;state.hear=null;state.err="";menu(false);render();return}
+  if(e.target.classList&&e.target.classList.contains("ntsel"))e.target.dataset.v=e.target.value;
+  if(e.target.id==="rseg"){state.rd.si=+e.target.value}
+  if(e.target.id==="rs"){const rd=state.rd;rd.s=+e.target.value;rd.from=1;rd.to=Math.min(10,AY[rd.s-1]);rd.err="";render()}
+  if(e.target.id==="rfrom"||e.target.id==="rto")syncRd();
+  const hr=state.hear;
+  if(hr&&e.target.id==="hfrom"){syncHear();if(!hr.multi||hr.to<hr.from)hr.to=hr.from;render()}
+  if(hr&&e.target.id==="hps"){syncHear();hr.pa=Math.min(hr.pa,AY[hr.ps-1]);render()}
+});
+document.addEventListener("input",e=>{
+  if(state.pd&&e.target.id==="pnote")state.pd.note=e.target.value;
+  if(e.target.id==="q"){const q=e.target.value.trim();document.querySelectorAll(".st[data-name]").forEach(b=>{b.style.display=!q||b.dataset.name.includes(q)?"":"none"})}
+});
+render();
+</script>
+</body>
+</html>
